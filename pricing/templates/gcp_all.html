@@ -1,0 +1,25 @@
+<h1>
+GCP (Google Cloud Platform) Pricing
+</h1>
+<p>
+Product Types:
+<table>
+<tr>
+{% for p in product %}
+{% ifchanged p.ptype %}
+</tr>
+<tr>
+{% endifchanged %}
+<td>
+{% ifchanged p.ptype %}
+{{ p.ptype }}
+{% endifchanged %}
+</td>
+<td>
+<a href="gcp/ptype={{p.ptype}}/psubtype={{ p.psubtype }}">
+{{p.psubtype}}
+<a>
+</td>
+{% endfor %}
+</tr>
+</table>

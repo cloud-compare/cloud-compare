@@ -1,0 +1,37 @@
+<h1> Offer: {{offer_code}} </h1>
+<h2> Family: {{product_family}} </h2>
+Count: {{count}}
+<br>
+
+<table>
+<tr>
+<th>From</th>
+<th>To</th>
+<th>Transfer Type</th>
+<th>Begin Range</th>
+<th>End Range</th>
+<th>Unit</th>
+<th>Price(USD)</th>
+<th>Description</th>
+</tr>
+{% for p in products %}
+<tr>
+<td>
+{% ifchanged %}
+  {{ p.from_location }}
+{% endifchanged %}
+</td>
+<td>
+{% ifchanged %}
+  {{ p.to_location }}
+{% endifchanged %}
+</td>
+<td>{{ p.transfer_type }}</td>
+<td>{{ p.begin_range }}</td>
+<td>{{ p.end_range }}</td>
+<td>{{ p.unit }}</td>
+<td>{{ p.price_per_unit }}</td>
+<td>{{ p.description }}</td>
+</tr>
+{% endfor %}
+</table>

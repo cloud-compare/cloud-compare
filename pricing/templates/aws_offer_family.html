@@ -1,0 +1,19 @@
+<h1> Offer: {{offer_code}} </h1>
+<h2> Family: {{product_family}} </h2>
+Count: {{count}}
+<p>
+<table>
+{% for p in products %}
+<tr>
+<td>
+{% ifchanged p.location %}
+{{ p.location }}
+{% endifchanged %}
+</td>
+<td>{{ p.term_type }}</td>
+<td>{{ p.price_per_unit }}</td>
+<td>{{ p.unit }}</td>
+<td>{{ p.description }}</td>
+</tr>
+{% endfor %}
+</table>

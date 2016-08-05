@@ -1,0 +1,48 @@
+<h2>
+Product Type: {{ptype}}
+<br>
+Subtype: {{psubtype}}
+</h2>
+
+<p>
+Total Entries: {{count}}
+<p>
+<table>
+<tr>
+<th>Name</th>
+<th>Cores</th>
+<th>Memory (GB)</th>
+<th>Preemptible</th>
+<th>$/hr US</th>
+<th>$/hr Asia</th>
+<th>$/hr Europe</th>
+</tr>
+{% for p in product %}
+<tr>
+<td>
+{{ p.pargs }}
+</td>
+<td>
+{{ p.cores }}
+</td>
+<td>
+{{ p.memory }}
+</td>
+<td>
+
+{% if p.preemptible %}
+PREEMPT
+{% endif %}
+</td>
+<td>
+{{ p.us }}
+</td>
+<td>
+{{ p.asia }}
+</td>
+<td>
+{{ p.europe }}
+</td>
+</tr>
+{% endfor %}
+</table>

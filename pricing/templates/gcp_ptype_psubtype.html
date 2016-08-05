@@ -1,0 +1,27 @@
+Hello from {{ptype}} {{psubtype}} page
+<p>
+Total Entries: {{count}}
+<table>
+{% for p in product %}
+<tr>
+<td>
+{{ p.pargs }}
+</td>
+<td>
+{{ p.freequota }}
+</td>
+<td>
+{{ p.tiers }}
+</td>
+<td>
+{{ p.us }}
+</td>
+<td>
+{{ p.asia }}
+</td>
+<td>
+{{ p.europe }}
+</td>
+</tr>
+{% endfor %}
+</table>

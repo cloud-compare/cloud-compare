@@ -1,0 +1,32 @@
+
+<h1>AWS Pricing</h1>
+<p>
+Total Rows: {{ attrs.total_rows }}
+<br>
+Total Offer Code: {{attrs.total_offer_code}}
+<br>
+Total Product Family: {{attrs.total_product_family}}
+<br>
+Offer type/Product Families: {{ attrs.prod_variations }}
+<p>
+<table>
+<tr>
+<th>Offer Code</th>
+<th>Product Families</th>
+{% for p in products %}
+{% ifchanged p.offer_code %}
+</tr>
+<tr>
+<td>
+<b>{{ p.offer_code }}</b>
+</td>
+{% endifchanged %}
+<td>
+<a href="aws/offer_code={{p.offer_code}}/product_family={{ p.product_family }}">
+{{p.product_family}}
+</a>
+</td>
+{% endfor %}
+</tr>
+</table>
+
