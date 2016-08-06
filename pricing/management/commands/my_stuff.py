@@ -4,6 +4,8 @@ import json
 import re
 
 from django.core.management.base import BaseCommand
+from django.db.models import Min
+from django.db.models import Max
 from django.db.models import Q
 from pricing.models import AWS
 from pricing.models import GCP
@@ -35,15 +37,31 @@ class Command(BaseCommand):
         print apr.count(), gpr.count()
 
         lm = 0.0
-        for m in [1.0, 2.0, 4.0, 8.0, 16.0, 32.0, 64.0, 128.0, 256.0]:
-            print "==== memory <", m
+        for m in [1.0, 2.0, 4.0, 8.0, 16.0, 32.0, 64.0, 128.0, 256.0, 512.0]:
+            print "==== memory < ", m
             a_1g = apr.filter(memory__lte = m, memory__gt = lm).order_by('instance_type')
+
+            for name in a_1g.values('instance_type', 'memory', 'vcpu').distinct():
+                x = a_1g.filter(instance_type = name['instance_type'])
+                regions = x.values('location', 'price_per_unit').distinct().order_by('location')
+                minprice = x.values('price_per_unit').aggregate(Min('price_per_unit'))
+                maxprice = x.values('price_per_unit').aggregate(Max('price_per_unit'))
+                print name['instance_type'], name['memory'], name['vcpu'], minprice, maxprice
+                for r in regions:
+                    print '    %s  %f' % (r['location'], r['price_per_unit'])
+                
+
+            #a_minprice = a_1g.values('price_per_unit').aggregate(Min('price_per_unit'))
+            #a_maxprice = a_1g.values('price_per_unit').aggregate(Max('price_per_unit'))
+            #a_instance = a_1g.values('instance_type').distinct()
+            #a_vcpu = a_1g.values('vcpu').distinct()
+            #a_memory = a_1g.values('memory').distinct()
+
+            #print a_instance, a_memory, a_vcpu, a_minprice, a_maxprice
+            #for a in a_1g:
+            #    print a.instance_type, a.memory, a.vcpu,  a.price_per_unit, a.location
+
             g_1g = gpr.filter(memory__lte = m, memory__gt = lm)
-            print a_1g.count(), g_1g.count()
-
-            for a in a_1g:
-                print a.instance_type, a.memory, a.vcpu,  a.price_per_unit, a.location
-
             for g in g_1g:
                 print g.pargs, g.memory, g.cores, g.us, g.asia, g.europe
 
