@@ -69,7 +69,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'cloud-compare.wsgi.application'
+WSGI_APPLICATION = 'cloud_compare.wsgi.application'
 
 
 # Database
