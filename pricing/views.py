@@ -12,6 +12,9 @@ from forms import EC2InstanceForm
 
 import pprint
 
+def home(request):
+    args = {}
+    return render(request, "home.html", args)
 
 def index(request):
     return HttpResponse("Future index page")
