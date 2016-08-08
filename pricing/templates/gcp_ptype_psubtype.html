@@ -1,5 +1,6 @@
-<!DOCTYYPE html>
-<html lang="en">
+{% extends "base.html" %}
+
+{% block content %}
 
 Hello from {{ptype}} {{psubtype}} page
 <p>
@@ -29,4 +30,4 @@ Total Entries: {{count}}
 {% endfor %}
 </table>
 
-</html>
+{% endblock %}

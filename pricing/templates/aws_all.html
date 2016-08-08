@@ -1,35 +1,42 @@
-<!DOCTYYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
+{% block title %} Main Page {% endblock %}
+
+{% block content %}
 <h1>AWS Pricing</h1>
 <p>
 Total Rows: {{ attrs.total_rows }}
 <br>
-Total Offer Code: {{attrs.total_offer_code}}
+Total Offer Code: {{ offer_name_count }}
 <br>
-Total Product Family: {{attrs.total_product_family}}
+Total Product Family: {{ product_family_count }}
 <br>
-Offer type/Product Families: {{ attrs.prod_variations }}
+Offer type/Product Families: {{ prod_variations }}
 <p>
+
 <table>
 <tr>
-<th>Offer Code</th>
-<th>Product Families</th>
-{% for p in products %}
-{% ifchanged p.offer_code %}
+<th/>
+{% for oc in offer_names %}
+<th>{{ oc.offer_code | cut:"Amazon" }}</th>
+{% endfor %}
 </tr>
+
+{% for tr in table %}
 <tr>
+{% for t in tr %}
 <td>
-<b>{{ p.offer_code }}</b>
-</td>
-{% endifchanged %}
-<td>
-<a href="aws/offer_code={{p.offer_code}}/product_family={{ p.product_family }}">
-{{p.product_family}}
+{% if t.label == '_Y_' %}
+<a href="aws/offer_code={{t.offer}}/product_family={{ t.family }}">
+X
 </a>
+{% elif t.label != '_N_' %}
+{{ t.label }}
+{% endif %}
 </td>
 {% endfor %}
 </tr>
+<tr><th>{{pf.product_family}}</th></tr>
+{% endfor %}
 </table>
-
-</html>
+{% endblock %}

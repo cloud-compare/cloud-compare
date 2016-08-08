@@ -23,13 +23,19 @@ def index(request):
 #
 def gcp(request):
     pr = GCP.objects
-    total_rows = pr.count()
-    total_types = pr.values('ptype').distinct().count();
-    total_subtypes = pr.values('psubtype').distinct().count();
 
+    total_rows = pr.count()
+
+    types = pr.values('ptype').distinct()
+    total_types = types.count()
+
+    subtypes = pr.values('psubtype').distinct()
+    total_subtypes = subtypes.count();
     product = pr.values('ptype', 'psubtype').order_by('ptype', 'psubtype').distinct()
 
     args = { 'product' : product,
+             'types' : types,
+             'subtypes' : subtypes,
              'total_rows' : total_rows,
              'total_types' : total_types,
              'total_subtypes' : total_subtypes}
@@ -61,13 +67,69 @@ def gcp_ptype_psubtype(request, ptype, psubtype):
 def aws(request):
     pr = AWS.objects
     attr = { 'total_rows' : pr.count() }
-    attr['total_offer_code'] = pr.values('offer_code').distinct().count()
-    attr['total_product_family'] = pr.values('product_family').distinct().count()
+    offer_name_count = pr.values('offer_code').distinct().count()
+    product_family_count = pr.values('product_family').distinct().count()
+
     pr = pr.values('offer_code', 'product_family')
     pr = pr.order_by('offer_code', 'product_family')
     pr = pr.distinct()
-    attr['prod_variations'] = pr.count()
-    return render(request, 'aws_all.html', { 'products' : pr, 'attrs' : attr})
+    prod_variations = pr.count()
+
+    on = pr.values('offer_code').distinct().order_by('offer_code')
+    offers = []
+    for o in on:
+        offers.append(o['offer_code'])
+    print offers
+
+    fn = pr.values('product_family').distinct().order_by('product_family')
+    pfamilies = []
+    for f in fn:
+        pfamilies.append(f['product_family'])
+
+    pf = pr.values('product_family').distinct().order_by('product_family')
+
+    # Build a 2-level python dict to lookup [offer_code][product_family]
+    # We'll use this to build the table content for rendering
+    odict = {}
+    for p in pr:
+        ok = p['offer_code']
+        if not ok in odict:
+            odict[ok] = {}
+
+        pk = p['product_family']
+        if not pk in odict[ok]:
+           odict[ok][pk] = True
+
+    tab = []
+    for p in pfamilies:
+        row = []
+        row.append({'label' : p})
+        for o in offers:
+            if p in odict[o]:
+                row.append({'label': '_Y_', 'offer' : o, 'family' : p})
+            else:
+                row.append({'label': '_N_'})
+
+        tab.append(row)
+
+#    for f in pf:
+#        pfam = pr.filter(product_family = f['product_family'])
+#        for o in on:
+#            s = pfam.filter(offer_code = o['offer_code'])
+#            if s.count() > 0:
+#                print o['offer_code'], f['product_family'], s.count()
+
+    args = { 'products' : pr,
+             'attrs' : attr,
+             'offer_names' : on,
+             'offer_name_count' : offer_name_count,
+             'product_family_count' : product_family_count,
+             'prod_variations' : prod_variations,
+             'odict' : odict,
+             'table' : tab,
+             'product_families' : pf}
+
+    return render(request, 'aws_all.html', args)
 
 
 # Displays drill-down to records with the same offer_code and product_family
