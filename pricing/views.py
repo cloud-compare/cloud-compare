@@ -23,8 +23,17 @@ def index(request):
 #
 def gcp(request):
     pr = GCP.objects
+    total_rows = pr.count()
+    total_types = pr.values('ptype').distinct().count();
+    total_subtypes = pr.values('psubtype').distinct().count();
 
-    args = { 'product' : pr.values('ptype', 'psubtype').order_by('ptype', 'psubtype').distinct() }
+    product = pr.values('ptype', 'psubtype').order_by('ptype', 'psubtype').distinct()
+
+    args = { 'product' : product,
+             'total_rows' : total_rows,
+             'total_types' : total_types,
+             'total_subtypes' : total_subtypes}
+
     return render(request, 'gcp_all.html', args)
 
 

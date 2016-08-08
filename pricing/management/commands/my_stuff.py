@@ -30,6 +30,7 @@ class Command(BaseCommand):
         apr = apr.filter(offer_code = 'AmazonEC2', product_family = 'Compute Instance',
                          term_type = 'OnDemand', tenancy = 'Shared',
                          operating_system = 'Linux')
+        apr = apr.exclude(current_generation = 'No')
 
         gpr = GCP.objects
         gpr = gpr.filter(ptype = 'COMPUTEENGINE', psubtype = 'VMIMAGE', preemptible = False)
@@ -47,8 +48,8 @@ class Command(BaseCommand):
                 minprice = x.values('price_per_unit').aggregate(Min('price_per_unit'))
                 maxprice = x.values('price_per_unit').aggregate(Max('price_per_unit'))
                 print name['instance_type'], name['memory'], name['vcpu'], minprice, maxprice
-                for r in regions:
-                    print '    %s  %f' % (r['location'], r['price_per_unit'])
+                # for r in regions:
+                #     print '    %s  %f' % (r['location'], r['price_per_unit'])
                 
 
             #a_minprice = a_1g.values('price_per_unit').aggregate(Min('price_per_unit'))
