@@ -1,0 +1,41 @@
+<!DOCTYYPE html>
+<html lang="en">
+
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+<style>
+body {font-family: "Lato", sans-serif}
+.mySlides {display: none}
+</style>
+
+<title>
+    {% block head_title %}Cloud Compare{% endblock %}
+</title>
+
+</head>
+
+<body>
+    <div class="w3-container w3-blue">
+      <h1>{% block title %}Cloud Compare{% endblock %}</h1>
+    </div>
+    <ul class="w3-navbar w3-theme">
+        <li><a class="w3-blue w3-padding-16" href="/">Home</a></li>
+        <li><a class="w3-padding-16" href="/pricing/aws">Amazon AWS</a></li>
+        <li><a class="w3-padding-16" href="/pricing/gcp">Google GPC</a></li>
+        <li class="w3-right"><a class="w3-padding-16" href="javascript:void(0)"><i class="fa fa-search"></i></a></li>
+    </ul>
+
+    <div id="content">
+    {% block content %}
+    {% endblock %}
+    </div>
+</body>
+
+<footer>
+    <p>&copy; 2016 John Muth. All rights reserved.
+    <br>Powered by W3.CSS</p>
+</footer>
+</html>
