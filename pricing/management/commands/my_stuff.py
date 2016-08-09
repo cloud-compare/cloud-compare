@@ -6,6 +6,7 @@ import re
 from django.core.management.base import BaseCommand
 from django.db.models import Min
 from django.db.models import Max
+from django.db.models import Count
 from django.db.models import Q
 from pricing.models import AWS
 from pricing.models import GCP
@@ -69,6 +70,12 @@ class Command(BaseCommand):
             lm = m
 
         return
+
+    elif cmd == 'foo':
+        apr = AWS.objects;
+        al = apr.values('offer_code', 'product_family').annotate(Count('id'))
+        print al
+        
 
 #    # foreach instance_type
 #    #   forech location

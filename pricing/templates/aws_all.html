@@ -1,9 +1,8 @@
 {% extends "base.html" %}
 
-{% block title %} Main Page {% endblock %}
+{% block title %}AWS Main Page {% endblock %}
 
 {% block content %}
-<h1>AWS Pricing</h1>
 <p>
 Total Rows: {{ attrs.total_rows }}
 <br>
@@ -14,21 +13,24 @@ Total Product Family: {{ product_family_count }}
 Offer type/Product Families: {{ prod_variations }}
 <p>
 
-<table>
-<tr>
+<div class="w3-responsive w3-card-4">
+<table class="w3-table w3-bordered w3-small">
+<thead>
+<tr class="w3-theme">
 <th/>
 {% for oc in offer_names %}
-<th>{{ oc.offer_code | cut:"Amazon" }}</th>
+<th style="text-align:right">{{ oc.offer_code }}</th>
 {% endfor %}
 </tr>
-
+</thead>
+<tbody>
 {% for tr in table %}
 <tr>
 {% for t in tr %}
-<td>
+<td style="text-align:right">
 {% if t.label == '_Y_' %}
 <a href="aws/offer_code={{t.offer}}/product_family={{ t.family }}">
-X
+{{ t.count }}
 </a>
 {% elif t.label != '_N_' %}
 {{ t.label }}
@@ -38,5 +40,8 @@ X
 </tr>
 <tr><th>{{pf.product_family}}</th></tr>
 {% endfor %}
+</tbody>
 </table>
+</div>
+
 {% endblock %}

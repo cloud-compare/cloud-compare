@@ -4,6 +4,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.db.models import Q
+from django.db.models import Count
 
 from pricing.models import AWS
 from pricing.models import GCP
@@ -70,17 +71,18 @@ def aws(request):
     offer_name_count = pr.values('offer_code').distinct().count()
     product_family_count = pr.values('product_family').distinct().count()
 
-    pr = pr.values('offer_code', 'product_family')
+    pr = pr.values('offer_code', 'product_family').annotate(Count('id'))
     pr = pr.order_by('offer_code', 'product_family')
-    pr = pr.distinct()
-    prod_variations = pr.count()
+    prod_variations = pr.distinct().count()
 
+    # Get distinct offer_code values
     on = pr.values('offer_code').distinct().order_by('offer_code')
     offers = []
     for o in on:
+        print 'offer=', o
         offers.append(o['offer_code'])
-    print offers
 
+    # get distinct product_family values
     fn = pr.values('product_family').distinct().order_by('product_family')
     pfamilies = []
     for f in fn:
@@ -98,7 +100,8 @@ def aws(request):
 
         pk = p['product_family']
         if not pk in odict[ok]:
-           odict[ok][pk] = True
+           odict[ok][pk] = p['id__count']
+           print ok, pk, odict[ok][pk]
 
     tab = []
     for p in pfamilies:
@@ -106,7 +109,7 @@ def aws(request):
         row.append({'label' : p})
         for o in offers:
             if p in odict[o]:
-                row.append({'label': '_Y_', 'offer' : o, 'family' : p})
+                row.append({'label': '_Y_', 'offer' : o, 'family' : p, 'count' : odict[o][p]})
             else:
                 row.append({'label': '_N_'})
 
