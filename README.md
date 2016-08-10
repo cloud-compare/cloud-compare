@@ -21,13 +21,28 @@ Environment: python 2.7, sqlite3, django 1.9
 
 ## Populate database (if you this twice you'll end up with 2 copies of every record)
 
-   To populate with data from Google:
+### Database population is perfomed in two steps:
 
-   ```$ python manage.py gcp_populate```
+* Scrape data from the remote site into a local directory.
+* Ingest data files from local directory into the database.
 
-   To populate with data from Amazon:
+Both operations are avilable through the ```manage.py``` 
 
-   ```$ python manage.py aws_populate```
+   To scrape data from Amazon:
+
+   ```$ python manage.py --gcp scrape <directory>```
+   (the directory must exist and be empty)
+
+   To scrape data from Google:
+
+   ```$ python manage.py --gcp scrape <directory>```
+   (the directory must exist and be empty)
+
+   To ingest scraped data:
+
+   ```$ python manage.py ingest <directory>```
+
+Running ```ingest``` more than one time results in multiple entries in the database.
 
 ## Run test server:
 
