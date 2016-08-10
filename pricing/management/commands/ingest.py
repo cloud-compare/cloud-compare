@@ -61,12 +61,15 @@ def ingest_AWS_term_ent(offer_code, term_type, offer_ent, products):
                 setattr(tr, convert_cc(tk), term_attributes[tk])
 
             # Pick up pricing dimensions
-            for pdk in offer_ent.keys():
-                pdv = offer_ent[pdk]
-                if pdv == 'pricePerUnit':
-                    pdv = pdv['USD']
+            for pdk in price_dimensions.keys():
+                for pdkk in price_dimensions[pdk].keys():
+                    pdv = price_dimensions[pdk][pdkk]
+                    if pdkk == 'pricePerUnit':
+                        pdv = pdv['USD']
 
-                setattr(tr, convert_cc(pdk), pdv)
+                    setattr(tr, convert_cc(pdkk), pdv)
+
+                pass
 
             # build product attribute columns
             pattr = prod['attributes']
