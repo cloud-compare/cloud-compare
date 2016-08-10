@@ -1,7 +1,6 @@
 
 # Scrapes pricing files from Cloud prover into local system
 
-import logging
 import os
 import httplib
 import zlib
@@ -34,6 +33,15 @@ def get_price_data(host, path):
     return roots
 
 
+# Convert a pathname to a flat file name
+# eg. /foo/bar.x -> foo.bar.x
+def path2name(path):
+    npath = path.replace('/', '.')
+    if npath[0] == '.':
+        npath = npath[1:]
+    return npath
+
+
 # Host and path for AWS pull
 AWS_HOST = 'pricing.us-east-1.amazonaws.com'
 AWS_PATH = '/offers/v1.0/aws/index.json'
@@ -58,8 +66,10 @@ def pull_aws(dir):
                'time' : time.strftime("%a, %d %b %Y %H:%M:%S +0000", time.gmtime())
            }
 
+    print path2name(path);
+
     # Write data to index
-    f = open('%s/%s' % (dir, os.path.basename(path)), "w")
+    f = open('%s/%s' % (dir, path2name(path)), "w")
     f.write(data)
     f.close()
 
@@ -67,13 +77,17 @@ def pull_aws(dir):
     for o in js['offers']:
         od = js['offers'][o]
 
+        print path2name(od['currentVersionUrl'])
+
         data = get_price_data(host, od['currentVersionUrl'])
-        f = open('%s/%s.current.json' % (dir, od['offerCode']), "w")
+        f = open('%s/%s' % (dir, path2name(od['currentVersionUrl'])), "w")
         f.write(data)
         f.close()
 
+        print path2name(od['versionIndexUrl'])
+
         data = get_price_data(host, od['versionIndexUrl'])
-        f = open('%s/%s.history.json' % (dir, od['offerCode']), "w")
+        f = open('%s/%s.history.json' % (dir, path2name(od['versionIndexUrl'])), "w")
         f.write(data)
         f.close()
 
@@ -109,8 +123,10 @@ def pull_gcp(dir):
         # TBD #### Logging
         pass
 
+    print path2name(path)
+
     # Write data into directory
-    f = open('%s/%s' % (dir, os.path.basename(path)), 'w')
+    f = open('%s/%s' % (dir, path2name(path)), 'w')
     f.write(data)
     f.close()
 
