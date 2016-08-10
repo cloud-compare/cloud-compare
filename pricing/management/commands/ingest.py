@@ -47,9 +47,11 @@ def ingest_AWS_term_ent(offer_code, term_type, offer_ent, products):
     term_attributes = offer_ent['termAttributes']
     prod = products[sku]
 
+    updates = []
+
     try:
         for p in offer_ent['priceDimensions'].keys():
-            # TBD #### Make Create the AWS model entry
+            # Create the AWS model entry
             tr = AWS(sku = sku, term_type = term_type, offer_code = offer_code,
                      product_family = prod['productFamily'],
                      effective_date = effective_date)
@@ -79,13 +81,14 @@ def ingest_AWS_term_ent(offer_code, term_type, offer_ent, products):
                 setattr(tr, convert_cc(pak), tv)
       
             # Write record to AWS table
-            tr.save()
+            #tr.save()
+            updates.append(tr)
 
     except:
         print 'Ignore bad entry - sku=%s code=%s type=%s date=%s' % \
               (sku, offer_code, term_type, effective_date)
 
-    return
+    return updates
 
 
 # Ingest a term list at the level of 'OnDemand' or 'Reserved'
@@ -93,11 +96,17 @@ def ingest_AWS_term(offer_code, term_type, offer, products):
 
     print 'Ingest %s %s' % (offer_code, term_type)
 
+    updates = []
     for o in offer:
         for oo in offer[o]:
-            ingest_AWS_term_ent(offer_code, term_type, offer[o][oo], products)
+            te = ingest_AWS_term_ent(offer_code, term_type, offer[o][oo], products)
 
-    return
+            # concatanate result to update list
+            updates = updates + te
+
+        pass
+
+    return updates
 
 
 # Ingest a single AWS offer file
@@ -108,11 +117,15 @@ def ingest_AWS_offer(offer, opath):
     for sku in offer['products']:
         products[sku] = offer['products'][sku]
 
+    updates = []
     # loop through the terms
     for term_type in offer['terms']:
-        ingest_AWS_term(offer['offerCode'], term_type,
-                        offer['terms'][term_type], products)
+        te = ingest_AWS_term(offer['offerCode'], term_type,
+                             offer['terms'][term_type], products)
+        # concatanate result to update list
+        updates = updates + te
 
+    AWS.objects.bulk_create(updates)
     return
 
 
@@ -120,7 +133,7 @@ def ingestAmazon(dir, fname):
     print 
     print 'Amazon(AWS) Price List'
 
-    path = '%s%s' % (dir, fname)
+    path = '%s/%s' % (dir, fname)
 
     # Read the top level file
     f = open(path, 'r')
@@ -140,7 +153,7 @@ def ingestAmazon(dir, fname):
         history = path2name(offer['versionIndexUrl'])
 
         # read in the offer file
-        opath = '%s%s' % (dir, current)
+        opath = '%s/%s' % (dir, current)
         of = open(opath, 'r')
         try:
             ojs = json.load(of)
@@ -160,7 +173,7 @@ def ingestGoogle(dir, fname):
     print 
     print 'Google(GCP) Price List'
 
-    path = '%s%s' % (dir, fname)
+    path = '%s/%s' % (dir, fname)
 
     # Read the top level file
     f = open(path, 'r')
@@ -278,7 +291,7 @@ class Command(BaseCommand):
             return;
 
         # base json file name
-        basepath = '%s%s' % (directory, path2name(mjs['path']))
+        basepath = '%s/%s' % (directory, path2name(mjs['path']))
         if not os.path.isfile(basepath):
             raise CommandError('base file %s does not exist' % basepath)
 

@@ -5,6 +5,10 @@ Very early. Working on cloud database.
 
 Environment: python 2.7, sqlite3, django 1.9
 
+## Test It:
+
+   ```$ python manage.py test```
+
 ## Initial setup (create empty database):
 
    ```$ python manage.py makemigrations pricing```
@@ -47,3 +51,5 @@ Running ```ingest``` more than one time results in multiple entries in the datab
 ## Run test server:
 
    ```$ python manage.py runserver```
+
+   The command prints the URL to connect to.
