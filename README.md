@@ -4,6 +4,7 @@
 Very early. Working on cloud database.
 
 Environment: python 2.7, sqlite3, django 1.9
+             pep8 to enforce coding standard
 
 ## Test It:
 

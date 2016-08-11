@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.test import TestCase, Client
 from django.core.management import call_command
 
 from pricing.models import AWS
@@ -9,8 +9,9 @@ import tempfile
 import shutil
 
 
-class DBTest(TestCase):
+class ViewTest(TestCase):
 
+    # small chunk of database
     fixtures = ['test_db.json']
 
     def setUp(self):
@@ -19,9 +20,22 @@ class DBTest(TestCase):
     def tearDown(self):
         pass
 
-    def test1(self):
+    def test_db(self):
         # make sure AWS table has data
         self.assertNotEqual(AWS.objects.count(), 0)
 
         # make sure GCP table has data
         self.assertNotEqual(GCP.objects.count(), 0)
+
+    def test_root(self):
+        # make sure we can set to root
+        c = Client()
+        response = c.get('/')
+        self.assertEqual(response.status_code, 200)
+
+        # try a bogus url, should get 404 (Not Found)
+        response = c.get('/bad-url')
+        self.assertEqual(response.status_code, 404)
+
+    def test_pricing(self):
+        pass

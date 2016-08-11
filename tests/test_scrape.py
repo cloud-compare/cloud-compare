@@ -8,6 +8,7 @@ import os
 import tempfile
 import shutil
 
+
 # Tests for management 'scrape' and 'ingest' commands
 class ScrapeTest(TestCase):
 
@@ -16,10 +17,8 @@ class ScrapeTest(TestCase):
     def setUp(self):
         self.tmpdir = tempfile.mkdtemp()
 
-
     def tearDown(self):
         shutil.rmtree(self.tmpdir)
-
 
     # Try Scraping from AWS
     def test_aws(self):
@@ -36,8 +35,8 @@ class ScrapeTest(TestCase):
         self.assertNotEqual(AWS.objects.count(), 0)
 
         # ensure we have some prices
-        self.assertNotEqual(AWS.objects.filter(price_per_unit__gt = 0).count(), 0)
-
+        self.assertNotEqual(AWS.objects.filter(price_per_unit__gt=0).count(),
+                            0)
 
     # Try Scraping from Google
     def test_gcp(self):
@@ -53,7 +52,6 @@ class ScrapeTest(TestCase):
         self.assertNotEqual(GCP.objects.count(), 0)
 
         # make sure we have some non-zero prices.
-        self.assertNotEqual(GCP.objects.filter(us__gt = 0).count(), 0)
-        self.assertNotEqual(GCP.objects.filter(asia__gt = 0).count(), 0)
-        self.assertNotEqual(GCP.objects.filter(europe__gt = 0).count(), 0)
-
+        self.assertNotEqual(GCP.objects.filter(us__gt=0).count(), 0)
+        self.assertNotEqual(GCP.objects.filter(asia__gt=0).count(), 0)
+        self.assertNotEqual(GCP.objects.filter(europe__gt=0).count(), 0)

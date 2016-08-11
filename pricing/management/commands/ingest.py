@@ -14,7 +14,8 @@ from django.core.management.base import BaseCommand, CommandError
 # Our models
 from pricing.models import AWS, GCP
 
-##### Utility Functions #####
+# ##### Utility Functions #####
+
 
 # Convert a pathname to a flat file name
 # eg. /foo/bar.x -> foo.bar.x
@@ -27,11 +28,14 @@ def path2name(path):
 # Converts CamelCase to underbars with pre-compiled re's
 first_cap_re = re.compile('(.)([A-Z][a-z]+)')
 all_cap_re = re.compile('([a-z0-9])([A-Z])')
+
+
 def convert_cc(name):
     s1 = first_cap_re.sub(r'\1_\2', name)
     return all_cap_re.sub(r'\1_\2', s1).lower()
 
-##### Amazon AWS Ingest #####
+
+# ##### Amazon AWS Ingest #####
 
 # At this point we have:
 #   'offerTermCode'
@@ -52,9 +56,9 @@ def ingest_AWS_term_ent(offer_code, term_type, offer_ent, products):
     try:
         for p in offer_ent['priceDimensions'].keys():
             # Create the AWS model entry
-            tr = AWS(sku = sku, term_type = term_type, offer_code = offer_code,
-                     product_family = prod['productFamily'],
-                     effective_date = effective_date)
+            tr = AWS(sku=sku, term_type=term_type, offer_code=offer_code,
+                     product_family=prod['productFamily'],
+                     effective_date=effective_date)
 
             # Pick up termAttributes
             for tk in term_attributes.keys():
@@ -82,9 +86,8 @@ def ingest_AWS_term_ent(offer_code, term_type, offer_ent, products):
                     tv = re.sub(',', '', tv)
 
                 setattr(tr, convert_cc(pak), tv)
-      
-            # Write record to AWS table
-            #tr.save()
+
+            # append to update list
             updates.append(tr)
 
     except:
@@ -102,7 +105,8 @@ def ingest_AWS_term(offer_code, term_type, offer, products):
     updates = []
     for o in offer:
         for oo in offer[o]:
-            te = ingest_AWS_term_ent(offer_code, term_type, offer[o][oo], products)
+            te = ingest_AWS_term_ent(offer_code, term_type,
+                                     offer[o][oo], products)
 
             # concatanate result to update list
             updates = updates + te
@@ -133,7 +137,7 @@ def ingest_AWS_offer(offer, opath):
 
 
 def ingestAmazon(dir, fname):
-    print 
+    print
     print 'Amazon(AWS) Price List'
 
     path = '%s/%s' % (dir, fname)
@@ -150,7 +154,7 @@ def ingestAmazon(dir, fname):
 
     for i in ijs['offers']:
         # Split up the entry
-        offer =  ijs['offers'][i]
+        offer = ijs['offers'][i]
         offer_code = offer['offerCode']
         current = path2name(offer['currentVersionUrl'])
         history = path2name(offer['versionIndexUrl'])
@@ -169,11 +173,11 @@ def ingestAmazon(dir, fname):
 
     return
 
-##### Google GCP Ingest #####
 
+# ##### Google GCP Ingest #####
 def ingestGoogle(dir, fname):
 
-    print 
+    print
     print 'Google(GCP) Price List'
 
     path = '%s/%s' % (dir, fname)
@@ -216,8 +220,8 @@ def ingestGoogle(dir, fname):
                     preemptible = True
                     pargs = pargs.rsplit('-', 1)[0]
 
-            pr = GCP(ptype = ptype, psubtype = psubtype, pargs = pargs,
-                     preemptible = preemptible)
+            pr = GCP(ptype=ptype, psubtype=psubtype, pargs=pargs,
+                     preemptible=preemptible)
 
             # copy over the first level contents
             for kk in pv:
@@ -242,10 +246,11 @@ class Command(BaseCommand):
     help = 'Ingests scraped data into databse'
 
     def add_arguments(self, parser):
-        parser.add_argument("directory", nargs = 1,
-                            help = 'Directory that contains scraped data')
-        parser.add_argument('-m', '--meta', required = False, action = 'store_true',
-                            help = 'Print metadata')
+        parser.add_argument("directory", nargs=1,
+                            help='Directory that contains scraped data')
+        parser.add_argument('-m', '--meta', required=False,
+                            action='store_true',
+                            help='Print metadata')
 
     def handle(self, *args, **options):
         directory = options['directory'][0]
@@ -275,13 +280,14 @@ class Command(BaseCommand):
         mf.close()
 
         # validate META file contents
-        if not 'cloudProvider' in mjs:
-            raise CommandError('%s does not contain "cloudProvider" tag' % meta)
-        if not 'host' in mjs:
+        if 'cloudProvider' not in mjs:
+            raise CommandError('%s does not contain "cloudProvider" tag' %
+                               meta)
+        if 'host' not in mjs:
             raise CommandError('%s does not contain "host" tag' % meta)
-        if not 'path' in mjs:
+        if 'path' not in mjs:
             raise CommandError('%s does not contain "path" tag' % meta)
-        if not 'time' in mjs:
+        if 'time' not in mjs:
             raise CommandError('%s does not contain "time" tag' % meta)
 
         print 'Scrape Time: %s' % mjs['time']
@@ -291,7 +297,7 @@ class Command(BaseCommand):
 
         # Just dump metadata?
         if options['meta']:
-            return;
+            return
 
         # base json file name
         basepath = '%s/%s' % (directory, path2name(mjs['path']))
@@ -316,4 +322,5 @@ class Command(BaseCommand):
             ingestGoogle(directory, path2name(mjs['path']))
 
         else:
-            raise CommandError('No not recognize provider %s' % mjs['cloudProvider'])
+            raise CommandError('No not recognize provider %s' %
+                               mjs['cloudProvider'])
