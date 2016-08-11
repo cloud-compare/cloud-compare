@@ -8,7 +8,7 @@ import os
 import tempfile
 import shutil
 
-# Tests for management 'scrape' command
+# Tests for management 'scrape' and 'ingest' commands
 class ScrapeTest(TestCase):
 
     tmpdir = None
@@ -56,3 +56,4 @@ class ScrapeTest(TestCase):
         self.assertNotEqual(GCP.objects.filter(us__gt = 0).count(), 0)
         self.assertNotEqual(GCP.objects.filter(asia__gt = 0).count(), 0)
         self.assertNotEqual(GCP.objects.filter(europe__gt = 0).count(), 0)
+
