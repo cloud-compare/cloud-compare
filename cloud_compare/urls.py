@@ -16,10 +16,10 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 
-from pricing import views
+from pricing import view_main
 
 urlpatterns = [
     url(r'^pricing/', include('pricing.urls')),
     url(r'^admin/', admin.site.urls),
-    url(r'^$', views.home, name='home')
+    url(r'^$', view_main.main, name='main')
 ]

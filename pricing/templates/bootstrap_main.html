@@ -1,0 +1,20 @@
+{% extends "bootstrap_base.html" %}
+
+{% block body_title %}
+{{ body_title }}
+{% endblock %}
+
+{% block content %}
+
+ <div class="container-fluid">
+  <div class="row">
+    {% for item in items %}
+      <div class="col-sm-4">
+        {% with collapse_label=item.label %}
+          {% include "collapse_tree.html" %}
+        {% endwith %}
+      </div>
+    {% endfor %}
+  </div>
+
+{% endblock %}
