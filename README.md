@@ -1,5 +1,6 @@
 # cloud-compare
-# Cloud Comparison Tool. Compare public clouds on price and performance.
+
+# Compare public clouds on price and performance.
 
 Very early. Working on cloud database.
 

@@ -1,5 +1,6 @@
 from django.conf.urls import url
 
+from . import view_aws
 from . import views
 
 urlpatterns = [
@@ -9,7 +10,7 @@ urlpatterns = [
     url(r'^aws/offer_code=(.+)/product_family=(.+)/compute_instance=(.+)/?$',
         views.aws_compute_instance, name='aws_compute_instance'),
     url(r'^aws/offer_code=(.+)/product_family=(.+)/?$',
-        views.aws_prodfamily, name='aws_prodfam'),
+        view_aws.aws_offer_family, name='aws_offer_family'),
 
     url(r'^gcp/?$', views.gcp, name='gcp'),
     url(r'^gcp/ptype=(.+)/psubtype=(.+)/?$', views.gcp_ptype_psubtype,
