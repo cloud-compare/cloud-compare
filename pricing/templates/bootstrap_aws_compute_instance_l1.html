@@ -3,7 +3,7 @@
 
 {% block content %}
 
-<h4>EC2 Compute Instances</h4>
+<h4> {{offer_code }} : {{product_family}} </h4>
 
 <div class="row">
   <div class="col-xs-12">
@@ -64,7 +64,7 @@
                       {{ i.item.storage }}
                     </td>
                     <td>
-                      {{ i.item.network_performance }}
+                      {{ i.item.network_performance|wordwrap:12|linebreaks }}
                     </td>
                     <td>
                       {# TBD #### Price per Unit (Min) #}

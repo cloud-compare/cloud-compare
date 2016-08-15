@@ -8,8 +8,10 @@ from django.db.models import Min, Max
 from pricing.models import AWS
 
 
+# Displays a AWS 'Bundle' product_family
 def aws_family_bundle(request, offer_code):
     """Handle AWS 'Bundle' items."""
+    aws = AWS.objects
     aws = aws.filter(offer_code=offer_code,
                      product_family='Bundle')
 
@@ -20,15 +22,41 @@ def aws_family_bundle(request, offer_code):
     return render(request, 'bootstrap_aws_bundle.html', args)
 
 
+
 def aws_family_data_transfer(request, offer_code):
     """Handle AWS 'Data Transfer' items."""
+    aws = AWS.objects
     aws = aws.filter(offer_code=offer_code,
                      product_family='Data Transfer')
 
-    pr = aws.order_by('from_location', 'from_location_type', 'to_location',
-                     'to_location_type', 'begin_range')
+    # pr = aws.order_by('from_location', 'from_location_type', 'to_location',
+    #                  'to_location_type', 'begin_range')
+    pr = aws.order_by('from_location', 'to_location', 'transfer_type',
+                      'begin_range')
+
+    items = []
+    ttlist = pr.values('transfer_type').order_by('transfer_type').distinct()
+    for tt in ttlist:
+        print tt['transfer_type']
+        ttpr = aws.filter(transfer_type=tt['transfer_type'])
+        min_price = ttpr.aggregate(Min('price_per_unit'))
+        max_price = ttpr.aggregate(Max('price_per_unit'))
+        items.append({
+                     'label': tt['transfer_type'],
+                     'min_price': min_price['price_per_unit__min'],
+                     'max_price': max_price['price_per_unit__max'],
+                     })
+
+        
+
+    dpr = pr.values('transfer_type', 'price_per_unit', 'unit')
+    dpr = dpr.order_by('transfer_type')
+    dpr = dpr.annotate(Max('price_per_unit')).annotate(Min('price_per_unit'))
+    dpr = dpr.distinct()
+
     args = {'offer_code': offer_code, 'product_family': 'Data Transfer',
-            'products': pr, 'count': pr.count()}
+            'items': items,
+            'products': dpr, 'count': pr.count()}
     return render(request, 'bootstrap_aws_data_transfer.html', args)
 
 
@@ -77,6 +105,23 @@ def aws_family_compute_instance(request, offer_code):
     return render(request, 'bootstrap_aws_compute_instance_l1.html', args)
 
 
+def aws_family_storage(request, offer_code):
+    """Handle AWS 'Storage' items."""
+    # Generic handling for other combos
+    aws = AWS.objects
+    aws = aws.filter(offer_code=offer_code, product_family='Storage')
+
+    vtpr = aws.values('volume_type').order_by('volume_type').distinct()
+    for vt in vtpr:
+        print vt['volume_type']
+
+    pr = aws.order_by('volume_type')
+    args = {'offer_code': offer_code, 'product_family': 'Storage',
+            'count': aws.count(), 'products': pr}
+
+    return render(request, 'bootstrap_aws_storage.html', args)
+
+
 def aws_offer_family(request, offer_code, product_family):
     """Handle AWS requests where offer_code and product_family are known."""
 
@@ -93,6 +138,10 @@ def aws_offer_family(request, offer_code, product_family):
     if product_family == 'Compute Instance':
         return aws_family_compute_instance(request, offer_code)
 
+    # Storage
+    if product_family == 'Storage':
+        return aws_family_storage(request, offer_code)
+
     # Generic handling for other combos
     aws = AWS.objects
     aws = aws.filter(offer_code=offer_code, product_family=product_family)
@@ -102,3 +151,27 @@ def aws_offer_family(request, offer_code, product_family):
             'count': pr.count(), 'products': pr}
 
     return render(request, 'bootstrap_aws_offer_family.html', args)
+
+
+# Information for a specific instance type (eg. 't2.micro')
+def aws_compute_instance(request, offer_code, product_family, instance_type):
+    """Handle AWS requests for a specific compute_instance."""
+
+    aws = AWS.objects.filter(Q(product_family='Compute Instance'),
+                     Q(instance_type=instance_type))
+
+    # Get summarized information about this instance_type
+    sum = aws.values('instance_family', 'instance_type', 'vcpu', 'memory',
+                     'physical_processor', 'network_performance',
+                     'storage', 'current_generation', 'clock_speed',
+                     'dedicated_ebs_throughput')
+    sum = sum.distinct()
+
+    # TBD #### Pricing data
+    args = {
+               'offer_code': offer_code,
+               'product_family': product_family,
+               'instance_type': instance_type,
+               'instance': sum[0],
+           }
+    return render(request, 'bootstrap_aws_compute_instance.html', args)

@@ -1,0 +1,161 @@
+
+{% extends "bootstrap_base.html" %}
+
+{% block head_title %}
+{{ instance_type }}
+{% endblock %}
+
+{% block content %}
+  <h4>
+    {{ offer_code }}
+    :
+    {{ product_family }}
+    :
+    {{ instance_type }}
+  </h4>
+
+  <div class="row">
+
+    {# Responsive column sizing!!! #}
+    <div class="col-xs-12 col-sm-6">
+      <div class="panel-group">
+
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              Specifications
+            </h4>
+          </div>
+
+
+          {# Properties #}
+          <div class="table-responsive">
+            <table class="table table_condensed">
+              <thead>
+                <tr>
+                  <th>Memory</th>
+                  <th>vCPU</th>
+                  <th>Network<br>Performance</th>
+                  <th>Storage</th>
+                </tr>
+              </thead>
+  
+              <tbody>
+                <tr>
+                  <td>{{ instance.memory }} Gib</td>
+                  <td>{{ instance.vcpu }}</td>
+                  <td>{{ instance.network_performance|wordwrap:16|linebreaks }}</td>
+                  <td>{{ instance.storage }}</td>
+                </tr>
+  
+                {# Blank row between associated rows #}
+                <tr>
+                  <td/>
+                  <td/>
+                  <td/>
+                  <td/>
+                </tr>
+  
+                <tr>
+                  <th>Current<br>Generation</th>
+                  <th>Physical<br>Processor</th>
+                  <th>Clock<br>Speed</th>
+                  <th>Decidated<br>EBS<br>Throughput</th>
+                </tr>
+  
+                <tr>
+                  <td>{{ instance.current_generation }}</td>
+                  <td>{{ instance.physical_processor|wordwrap:16|linebreaks }}</td>
+                  <td>{{ instance.clock_speed }}</td>
+                  <td>{{ instance.dedicated_ebs_throughput }}</td>
+                </tr>
+  
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+       
+    <div class="col-xs-12 col-sm-6">
+      <div class="panel-group">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+          Prices
+            </h4>
+          </div>
+
+          <table class="table table_condensed">
+            <thead>
+              <tr>
+                <th>OnDemand</th>
+                <th>Reserved<br>1 Year</x`th>
+                <th>Reserved<br>3 Years</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>$x.yz - $a.bc<br>Per Hour</td>
+                <td>  
+                  <b>All Upfront</b>
+                  <br>
+                  $xxxxxx -$yyyyyy
+                  <br>
+                  <b>Effective</b>
+                  <br>
+                  ($x.yz - $a.bc)<br>Per Hour
+                </td>
+                <td>  
+                  <b>All Upfront</b>
+                  <br>
+                  $xxxxxx -$yyyyyy
+                  <br>
+                  <b>Effective</b>
+                  <br>
+                  ($x.yz - $a.bc)<br>Per Hour
+                </td>
+              </tr>
+              <tr>
+                <td></td>
+                <td>  
+                  <b>Partial Upfront</b>
+                  <br>
+                  $xxxxxx -$yyyyyy
+                  <br>
+                  <b>plus</b>
+                  <br>
+                  $a.bc - $d.ef
+                  <br>
+                  Per Hour
+                  <br>
+                  <b>Effective</b>
+                  <br>
+                  ($x.yz - $a.bc)<br>Per Hour
+                </td>
+                <td>  
+                  <b>Partial Upfront</b>
+                  <br>
+                  $xxxxxx -$yyyyyy
+                  <br>
+                  <b>plus</b>
+                  <br>
+                  $a.bc - $d.ef
+                  <br>
+                  Per Hour
+                  <br>
+                  <b>Effective</b>
+                  <br>
+                  ($x.yz - $a.bc)<br>Per Hour
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+{% endblock %}

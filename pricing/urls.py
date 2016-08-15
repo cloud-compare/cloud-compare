@@ -8,7 +8,7 @@ urlpatterns = [
     # AWS Views
     url(r'^aws/?$', views.aws, name='aws'),
     url(r'^aws/offer_code=(.+)/product_family=(.+)/compute_instance=(.+)/?$',
-        views.aws_compute_instance, name='aws_compute_instance'),
+        view_aws.aws_compute_instance, name='aws_compute_instance'),
     url(r'^aws/offer_code=(.+)/product_family=(.+)/?$',
         view_aws.aws_offer_family, name='aws_offer_family'),
 

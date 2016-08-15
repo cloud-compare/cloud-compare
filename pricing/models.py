@@ -51,10 +51,22 @@ class AWS(models.Model):
 
     # this is union of all fields defined for all attribute types.
     # Pulled by hand 24 July 2016.
+
+    # != NULL when product_family='Storage'
     availability = models.TextField(null=True)
+
+    # != NULL when product_family='AmazonEleasticCache'
     cache_engine = models.TextField(null=True)
+
+    # != NULL when product_family='Compute Instance' or 'Database Instance'
     clock_speed = models.TextField(null=True)
+
+    # != NULL in product='AmazonSES'
     content_type = models.TextField(null=True)
+
+    # != NULL in 'product_family' one of:
+    #   'Compute Instance', 'Database Instance', 'Cache Instance',
+    #   'Dedicated Host'
     current_generation = models.TextField(null=True)
     database_edition = models.TextField(null=True)
     database_engine = models.TextField(null=True)
@@ -111,8 +123,15 @@ class AWS(models.Model):
     resource_endpoint = models.TextField(null=True)
     routing_target = models.TextField(null=True)
     routing_type = models.TextField(null=True)
-    servicecode = models.TextField(null=True)
+
+    # Never null. Always == offercode EXCEPT 
+    # EXCEPT when == AWSDataTransfer (AWS to AWS)
+    servicecode = models.TextField(null=True)     
+
+    # != NULL when offer_code='AmazonEC2' and product_family="Dedicated Host'
     sockets = models.TextField(null=True)
+
+    # != NULL when offer_code='AmazonS3'
     storage = models.TextField(null=True)
     storage_class = models.TextField(null=True)
     storage_media = models.TextField(null=True)
