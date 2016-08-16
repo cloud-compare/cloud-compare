@@ -36,12 +36,12 @@ Both operations are avilable through the ```manage.py```
 
    To scrape data from Amazon:
 
-   ```$ python manage.py --gcp scrape <directory>```
+   ```$ python manage.py scrape --aws <directory>```
    (the directory must exist and be empty)
 
    To scrape data from Google:
 
-   ```$ python manage.py --gcp scrape <directory>```
+   ```$ python manage.py scrape --gcp <directory>```
    (the directory must exist and be empty)
 
    To ingest scraped data:
