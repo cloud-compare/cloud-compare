@@ -33,9 +33,9 @@ class ViewTest(TestCase):
         response = c.get('/')
         self.assertEqual(response.status_code, 200)
 
-        # try a bogus url, should get 404 (Not Found)
+        # try a bogus url, should get 200 with error page
         response = c.get('/bad-url')
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 200)
 
     def test_pricing(self):
         pass
