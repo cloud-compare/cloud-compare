@@ -111,13 +111,15 @@ def aws_family_storage(request, offer_code):
     aws = AWS.objects
     aws = aws.filter(offer_code=offer_code, product_family='Storage')
 
+    vlist = []
     vtpr = aws.values('volume_type').order_by('volume_type').distinct()
     for vt in vtpr:
         print vt['volume_type']
+        a = aws.filter(volume_type=vt['volume_type'])
+        vlist.append({'label': vt['volume_type'], 'products': a})
 
-    pr = aws.order_by('volume_type')
     args = {'offer_code': offer_code, 'product_family': 'Storage',
-            'count': aws.count(), 'products': pr}
+            'items': vlist}
 
     return render(request, 'bootstrap_aws_storage.html', args)
 

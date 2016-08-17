@@ -17,10 +17,35 @@
             </h4>
           </div>
 
-          Hello Saturn, all {{count}} of you
-
           <div class="table-responsive">
             <table class="table table_condensed">
+             {% for ip in items %}
+                <thead>
+                  <tr>
+                    <th>{{ ip.label }}</th>
+                  </tr>
+                </thread>
+                <tbody>
+
+                {% for item in ip.products %}
+                  <tr>
+                    <td>{{ item.storage_class }}</td>
+                    <td>{{ item.durability }}</td>
+{% comment %}
+                  <td>
+                    <table class="table table-condensed">
+                      <tbody>
+                          <tr>
+                            {{ item }}
+                          </tr>
+                      </tbody>
+                    </table>
+                  </td>
+{% endcomment %}
+                   </tr>
+                 {% endfor %}
+                </tbody>
+              {% endfor %}
             </table>
           </div>
 

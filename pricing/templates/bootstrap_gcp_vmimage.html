@@ -1,0 +1,96 @@
+{% extends "bootstrap_base.html" %}
+
+{% block content %}
+  <h5>
+    Google Cloud Platform (GCP)
+  </h5>
+  <h5>
+    COMPUTEENGINE
+    /
+    {{ offer_code }}
+    /
+    {{ product_family }}
+  </h5>
+
+  <div class="row">
+    <div class="col-xs-12 col-sm-6">
+      <div class="panel-group">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              Specifications
+            </h4>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table table_condensed">
+              <thead>
+                <tr>
+                  <th>Memory</th>
+                  <th>Cores</th>
+                  <th>Core Type</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td> {{ specs.memory }} GB</td>
+                  <td> {{ specs.cores }} </td>
+                  <td> {{ specs.core_type }} </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-6">
+      <div class="panel-group">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              Pricing (USD)
+            </h4>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table table_condensed">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>U.S.</th>
+                  <th>Asia</th>
+                  <th>Europe</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                <tr>
+                  <th> Preemptible</th>
+                  <td> {{ prices.preempt.us.per_hour}}/Hr </td>
+                  <td> {{ prices.preempt.asia.per_hour}} </td>
+                  <td> {{ prices.preempt.europe.per_hour}} </td>
+                </tr>
+
+                  <th> Nonpreemptible</th>
+                  <td> {{ prices.base.us.per_hour}}/Hr </td>
+                  <td> {{ prices.base.asia.per_hour}} </td>
+                  <td> {{ prices.base.europe.per_hour}} </td>
+                </tr>
+                <tr>
+                  <td> </td>
+                  <td> {{ prices.base.us.per_year}}/Yr </td>
+                  <td> {{ prices.base.asia.per_year}} </td>
+                  <td> {{ prices.base.europe.per_year}} </td>
+                </tr>
+
+              </tbody>
+
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+{% endblock %}

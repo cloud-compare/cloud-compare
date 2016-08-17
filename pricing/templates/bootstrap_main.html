@@ -6,8 +6,34 @@
 
 {% block content %}
 
- <div class="container-fluid">
-  <div class="row">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-12 col-sm-6">
+        <div class="panel-group">
+
+          <a class="btn btn-default"
+             href="/pricing/gcp/ptype=COMPUTEENGINE/psubtype=VMIMAGE"
+             role="button">
+
+            Google GCP VMIMAGES
+
+          </a>
+        <div class="panel-group">
+
+          <a class="btn btn-default"
+             href="/pricing/aws/offer_code=AmazonEC2/product_family=Compute Instance"
+             role="button">
+
+            Amazom EC2 Instances
+
+          </a>
+
+        </div>
+      </div>
+    </div>
+  </dib>
+
+{% comment %}
     {% for item in items %}
       <div class="col-sm-4">
         {% with collapse_label=item.label %}
@@ -15,6 +41,6 @@
         {% endwith %}
       </div>
     {% endfor %}
-  </div>
+{% endcomment %}
 
 {% endblock %}
