@@ -8,7 +8,7 @@ from models import GCP
 # Price per month 
 # TBD ### Work in GCP discount curve
 def gcp_per_year(price_per_hour):
-    return price_per_hour * 8760
+    return price_per_hour * 8760 * 0.7
 
 class VMImageItem:
 
