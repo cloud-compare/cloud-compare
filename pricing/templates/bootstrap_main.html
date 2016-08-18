@@ -12,56 +12,61 @@
          
         <div class="panel panel-default">
           <div class="panel-heading">
-            Virtual Machines
+            <a data-toggle="collapse" href="#collapseVM">
+              Virtual Machines
+            </a>
           </div>
 
           <div class="panel-body">
+            <div id="collapseVM" class="panel-collapse collapse in">
 
-          <table class="table">
-          {% for vmtype in items.vmtypes %}
-            <tr>
-              <td>{{ vmtype.name }}</td>
+              <table class="table">
+              {% for vmtype in items.vmtypes %}
+                <tr>
+                  <td>{{ vmtype.name }}</td>
+    
+                  <td>
+                    <a class="btn btn-default" href="#" role="button" disabled="disabled">
+                      <i class="fa fa-balance-scale" aria-hidden="true"></i>
+                    </a>
+                  </td>
+    
+                  <td>
+                  {% if vmtype.gcp %}
+                     <a class="btn btn-default"
+                        href="/pricing/gcp/ptype=COMPUTEENGINE/psubtype=VMIMAGE"
+                        role="button">
+    
+                       <i class="fa fa-google" aria-hidden="true"></i>
+                     </a>
+                  {% endif %}
+                  </td>
+    
+                  <td>
+                  {% if vmtype.aws %}
+                    <a class="btn btn-default"
+                        href="/pricing/aws/offer_code=AmazonEC2/product_family=Compute Instance"
+                        role="button">
+    
+                      <i class="fa fa-amazon" aria-hidden="true"></i>
+    
+                    </a>
+                  {% endif %}
+                  </td>
+    
+                  <td>
+                  {% if vmtype.azure %}
+                    <a class="btn btn-default" href="#" role="button" disabled="disabled">
+                      <i class="fa fa-windows" aria-hidden="true"></i>
+                    </a>
+                  {% endif %}
+                  </td>
+    
+                </tr>
+              {% endfor %}
+              </table>
 
-              <td>
-                <a class="btn btn-default" href="#" role="button" disabled="disabled">
-                  <i class="fa fa-balance-scale" aria-hidden="true"></i>
-                </a>
-              </td>
-
-              <td>
-              {% if vmtype.gcp %}
-                 <a class="btn btn-default"
-                    href="/pricing/gcp/ptype=COMPUTEENGINE/psubtype=VMIMAGE"
-                    role="button">
-
-                   <i class="fa fa-google" aria-hidden="true"></i>
-                 </a>
-              {% endif %}
-              </td>
-
-              <td>
-              {% if vmtype.aws %}
-                <a class="btn btn-default"
-                    href="/pricing/aws/offer_code=AmazonEC2/product_family=Compute Instance"
-                    role="button">
-
-                  <i class="fa fa-amazon" aria-hidden="true"></i>
-
-                </a>
-              {% endif %}
-              </td>
-
-              <td>
-              {% if vmtype.azure %}
-                <a class="btn btn-default" href="#" role="button" disabled="disabled">
-                  <i class="fa fa-windows" aria-hidden="true"></i>
-                </a>
-              {% endif %}
-              </td>
-
-            </tr>
-          {% endfor %}
-          </table>
+          </div>
         </div>
       </div>
     </div>
