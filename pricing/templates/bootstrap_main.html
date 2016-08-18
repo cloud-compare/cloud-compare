@@ -10,36 +10,59 @@
     <div class="row">
       <div class="col-xs-12 col-sm-6">
          
-            <div class="btn-group-vertical" role="group">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            Virtual Machines
+          </div>
 
-          <a class="btn btn-default"
-             href="/pricing/gcp/ptype=COMPUTEENGINE/psubtype=VMIMAGE"
-             role="button">
+          <div class="panel-body">
 
-            <i class="fa fa-google" aria-hidden="true"></i>
-            VMIMAGES
+          <table class="table">
+          {% for vmtype in items.vmtypes %}
+            <tr>
+              <td>{{ vmtype.name }}</td>
 
-          </a>
+              <td>
+                <a class="btn btn-default" href="#" role="button" disabled="disabled">
+                  <i class="fa fa-balance-scale" aria-hidden="true"></i>
+                </a>
+              </td>
 
-          <a class="btn btn-default"
-             href="/pricing/aws/offer_code=AmazonEC2/product_family=Compute Instance"
-             role="button">
+              <td>
+              {% if vmtype.gcp %}
+                 <a class="btn btn-default"
+                    href="/pricing/gcp/ptype=COMPUTEENGINE/psubtype=VMIMAGE"
+                    role="button">
 
-            <i class="fa fa-amazon" aria-hidden="true"></i>
-            EC2 Instances
+                   <i class="fa fa-google" aria-hidden="true"></i>
+                 </a>
+              {% endif %}
+              </td>
 
-          </a>
-          <a class="btn btn-default" href="#" role="button" disabled="disabled">
-            <i class="fa fa-windows" aria-hidden="true"></i>
-            Azure Images
-          </a>
+              <td>
+              {% if vmtype.aws %}
+                <a class="btn btn-default"
+                    href="/pricing/aws/offer_code=AmazonEC2/product_family=Compute Instance"
+                    role="button">
 
-          <a class="btn btn-default" href="#" role="button" disabled="disabled">
-            <i class="fa fa-balance-scale" aria-hidden="true"></i>
-            Compare
-          </a>
+                  <i class="fa fa-amazon" aria-hidden="true"></i>
 
-            </div>
+                </a>
+              {% endif %}
+              </td>
+
+              <td>
+              {% if vmtype.azure %}
+                <a class="btn btn-default" href="#" role="button" disabled="disabled">
+                  <i class="fa fa-windows" aria-hidden="true"></i>
+                </a>
+              {% endif %}
+              </td>
+
+            </tr>
+          {% endfor %}
+          </table>
+        </div>
       </div>
     </div>
   </dib>
