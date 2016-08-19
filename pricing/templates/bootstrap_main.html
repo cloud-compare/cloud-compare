@@ -6,80 +6,138 @@
 
 {% block content %}
 
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-xs-12 col-sm-6">
+  <div class="row">
+    <div class="col-xs-126">
          
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <a data-toggle="collapse" href="#collapseVM">
-              Virtual Machines
-            </a>
-          </div>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <a data-toggle="collapse" href="#collapseVM">
+            Virtual Machines
+          </a>
+        </div>
 
-          <div class="panel-body">
-            <div id="collapseVM" class="panel-collapse collapse in">
+        <div class="panel-body">
+          <div id="collapseVM" class="panel-collapse collapse in">
 
-              <table class="table">
-              {% for vmtype in items.vmtypes %}
-                <tr>
-                  <td>{{ vmtype.name }}</td>
-    
-                  <td>
-                    <a class="btn btn-default" href="#" role="button" disabled="disabled">
-                      <i class="fa fa-balance-scale" aria-hidden="true"></i>
+          {% for tc in items %}
+            {% if tc.total > 0 %}
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h4 class="panel-title">
+                    <a data-toggle="collapse" href="#vm{{tc.tclass|slugify}}">
+                      Memory {{ tc.tclass }} GB
                     </a>
-                  </td>
-    
-                  <td>
-                  {% if vmtype.gcp %}
-                     <a class="btn btn-default"
-                        href="/pricing/gcp/ptype=COMPUTEENGINE/psubtype=VMIMAGE"
-                        role="button">
-    
-                       <i class="fa fa-google" aria-hidden="true"></i>
-                     </a>
-                  {% endif %}
-                  </td>
-    
-                  <td>
-                  {% if vmtype.aws %}
-                    <a class="btn btn-default"
-                        href="/pricing/aws/offer_code=AmazonEC2/product_family=Compute Instance"
-                        role="button">
-    
-                      <i class="fa fa-amazon" aria-hidden="true"></i>
-    
-                    </a>
-                  {% endif %}
-                  </td>
-    
-                  <td>
-                  {% if vmtype.azure %}
-                    <a class="btn btn-default" href="#" role="button" disabled="disabled">
-                      <i class="fa fa-windows" aria-hidden="true"></i>
-                    </a>
-                  {% endif %}
-                  </td>
-    
-                </tr>
-              {% endfor %}
-              </table>
+                  </h4>
+                </div>
 
+                <div id="vm{{tc.tclass|slugify}}" class="panel-collapse collapse">
+                  <div class="panel-body">
+                    <div class="table-responsive">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                        <th>Name</th>
+                        <th>Mem</th>
+                        <th>CPU</th>
+                        <th>Price<br>USD</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for item in tc.items %}
+                          <tr>
+        
+                          <td>
+                            <button type="button"
+                                    class="btn btn-default btn-block"
+                                    data-toggle="modal"
+                                    data-target="#md{{item.name|slugify}}"}>
+
+                            <small>
+                          {% if item.provider == 'amazon' %}
+                            <i class="fa fa-amazon" aria-hidden="true"></i>
+                          {% elif item.provider == 'google' %}
+                            <i class="fa fa-google" aria-hidden="true"></i>
+                          {% elif item.provider == 'microsoft' %}
+                            <i class="fa fa-windows" aria-hidden="true"></i>
+                          {% else %}
+                          {% endif %}
+        
+                              {{ item.name }}
+                              </small>
+                            </button>
+
+  {# This is the modal content, 1 for each VMIMAGE #}
+  <div class="modal fade" id="md{{item.name|slugify}}" role="dialog">
+    <div class="modal-dialog modal-lg">
+    
+      <!-- Modal associated with button-->
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">
+            {% if item.provider == 'amazon' %}
+              <i class="fa fa-amazon" aria-hidden="true"></i>
+              <small>Amazon</small>
+              <br>
+              <small>AmazonEC2 : Compute Instance : {{ item.name }}</small>
+            {% elif item.provider == 'google' %}
+              <i class="fa fa-google" aria-hidden="true"></i>
+              <small>Google</small>
+              <br>
+              <small>ComputeEngine : VMImage: {{ item.name }}</small>
+            {% elif item.provider == 'microsoft' %}
+              <i class="fa fa-windows" aria-hidden="true"></i>
+            {% else %}
+            {% endif %}
+            <br>
+          </h4>
+        </div>
+
+        <div class="modal-body">
+          <div class="row">
+            {# Include the correct generator #}
+            {% if item.provider == 'amazon' %}
+              {% with item=item.details %} 
+                {% include "bootstrap_aws_compute_instance.html" %}
+              {% endwith %}
+            {% elif item.provider == 'google' %}
+              {% with item=item.details %} 
+                {% include "bootstrap_gcp_vmimage.html" %}
+              {% endwith %}
+            {% elif item.provider == 'microsoft' %}
+              Watch this space
+            {% endif %}
           </div>
         </div>
+
       </div>
     </div>
-  </dib>
+  </div>
+                          </td>
+        
+                          <td>
+                            {{ item.memory }}
+                          </td>
+        
+                          <td>
+                            {{ item.cpu }}
+                          </td>
+        
+                          <td>
+                            {{ item.price|floatformat:3 }}
+                          </td>
+        
+                          </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
 
-{% comment %}
-    {% for item in items %}
-      <div class="col-sm-4">
-        {% with collapse_label=item.label %}
-          {% include "collapse_tree.html" %}
-        {% endwith %}
-      </div>
-    {% endfor %}
-{% endcomment %}
 
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+          {% endfor %}
 {% endblock %}

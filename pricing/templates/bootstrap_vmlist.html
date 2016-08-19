@@ -1,0 +1,75 @@
+{% extends "bootstrap_base.html" %}
+
+{% block content %}
+
+  <h5>
+    Virtual Machines
+  </h5>
+
+  <div class="row">
+    <div class="col-xs-12 col-sm-6">
+      <div class="panel-group">
+
+          <div class="panel panel-default">
+<br>
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                    {{ provider }}: {{ tclass }} GB
+                </a>
+              </h4>
+            </div>
+
+            <table class="table">
+              <thead>
+                <tr>
+                <th>Name</th>
+                <th>Memory</th>
+                <th>CPU</th>
+                <th>Price<br>USD</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in items %}
+                  <tr>
+
+                  <td>
+                    <a class="btn btn-default btn-block"
+                       href="{{item.url}}"
+                       role="button">
+
+                  {% if item.provider == 'amazon' %}
+                    <i class="fa fa-amazon" aria-hidden="true"></i>
+                  {% elif item.provider == 'google' %}
+                    <i class="fa fa-google" aria-hidden="true"></i>
+                  {% elif item.provider == 'microsoft' %}
+                    <i class="fa fa-windows" aria-hidden="true"></i>
+                  {% else %}
+                  {% endif %}
+
+                    {{ item.name }}
+                    </a>
+                  </td>
+
+                  <td>
+                    {{ item.memory }}
+                  </td>
+
+                  <td>
+                    {{ item.cpu }}
+                  </td>
+
+                  <td>
+                    {{ item.price|floatformat:3 }}
+                  </td>
+
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+
+          </div>
+
+       </div>
+     </div>
+
+{% endblock %}

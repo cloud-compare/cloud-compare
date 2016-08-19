@@ -44,11 +44,18 @@ Both operations are avilable through the ```manage.py```
    ```$ python manage.py scrape --gcp <directory>```
    (the directory must exist and be empty)
 
-   To ingest scraped data:
+   To ingest scraped data into master DB:
 
    ```$ python manage.py ingest <directory>```
 
-Running ```ingest``` more than one time results in multiple entries in the database.
+Running ```ingest``` more than one time results in multiple entries in the 
+master database.
+
+   To extract data from master DB to UI DB's
+   ```$ python manage.py extract```
+
+Running ```extract``` more than one time results in multiple entries in the 
+UI database.
 
 ## Run test server:
 

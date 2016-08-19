@@ -159,3 +159,57 @@ class AWS(models.Model):
     # termAttributes
     lease_contract_length = models.TextField(null=True)
     purchase_option = models.TextField(null=True)
+
+
+# ## UI Tables
+
+# Prebuilt table for the main page
+TYPE_CHOICES = (
+    ('VirtMach', 'Virtual Machine'),
+)
+
+class UIMain(models.Model):
+    # Type of entry
+    type = models.TextField(choices=TYPE_CHOICES)
+
+    # Our classification
+    tclass = models.TextField()
+
+    # Total across all providers
+    total = models.IntegerField()
+
+    # number available at google
+    gcp = models.IntegerField()
+
+    # number available at amazon
+    aws = models.IntegerField()
+
+    # number available at mocrosoft
+    azure = models.IntegerField()
+
+
+
+class UIVMSummary(models.Model):
+    # Provider
+    PROVIDER_CHOICES = (
+        ('google', 'google'),
+        ('amazon', 'amazon'),
+        ('micrsoft', 'micrsoft'),
+    )
+    provider = models.TextField(choices=PROVIDER_CHOICES)
+
+    # Class of instance
+    tclass = models.TextField()
+
+    # Name of instance
+    name = models.TextField()
+
+    memory = models.FloatField()
+
+    cpu = models.IntegerField()
+
+    # Low price in US
+    price = models.FloatField()
+
+    # url to use
+    url = models.TextField()

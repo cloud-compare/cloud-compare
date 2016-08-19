@@ -2,16 +2,14 @@ from django.conf.urls import url
 
 from . import view_aws
 from . import view_gcp
+from . import view_main
 
 urlpatterns = [
-    # AWS Views
-    url(r'^aws/offer_code=(.+)/product_family=(.+)/compute_instance=(.+)/?$',
-        view_aws.aws_compute_instance, name='aws_compute_instance'),
-    url(r'^aws/offer_code=(.+)/product_family=(.+)/?$',
-        view_aws.aws_offer_family, name='aws_offer_family'),
-
-    # GCP View
-    url(r'^gcp/ptype=(.+)/psubtype=(.+)/?$', view_gcp.gcp_ptype_psubtype,
-        name='gcp_ptype_psubtype'),
+    # New views
+    url(r'^type=(.+)/provider=(.+)/tclass=(.+)/?$',
+        view_main.class_list, name='class_list'),
     url(r'^gcp/vmimage=(.+)/?$', view_gcp.gcp_vmimage, name='gcp_vmimage'),
+    url(r'^aws/offer_code=(.+)/compute_instance=(.+)/?$',
+        view_aws.aws_compute_instance, name='aws_compute_instance'),
+
 ]

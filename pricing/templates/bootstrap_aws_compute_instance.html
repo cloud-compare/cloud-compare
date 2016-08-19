@@ -1,25 +1,5 @@
-
-{% extends "bootstrap_base.html" %}
-
-{% block head_title %}
-{{ instance_type }}
-{% endblock %}
-
-{% block content %}
-  <h4>
-    {{ offer_code }}
-    :
-    {{ product_family }}
-    :
-    {{ instance_type }}
-  </h4>
-
-  <div class="row">
-
-    {# Responsive column sizing!!! #}
     <div class="col-xs-12 col-sm-6">
       <div class="panel-group">
-
         <div class="panel panel-default">
           <div class="panel-heading">
             <h4 class="panel-title">
@@ -27,25 +7,23 @@
             </h4>
           </div>
 
-
-          {# Properties #}
           <div class="table-responsive">
             <table class="table table_condensed">
               <thead>
                 <tr>
                   <th>Memory</th>
                   <th>vCPU</th>
-                  <th>Network<br>Performance</th>
-                  <th>Storage</th>
+                  <th>Physical<br>Processor</th>
+                  <th>Clock<br>Speed</th>
                 </tr>
               </thead>
   
               <tbody>
                 <tr>
-                  <td>{{ instance.memory }} Gib</td>
-                  <td>{{ instance.vcpu }}</td>
-                  <td>{{ instance.network_performance|wordwrap:12|linebreaks }}</td>
-                  <td>{{ instance.storage }}</td>
+                  <td>{{ item.instance.memory }} Gib</td>
+                  <td>{{ item.instance.vcpu }}</td>
+                  <td>{{ item.instance.physical_processor|wordwrap:12|linebreaks }}</td>
+                  <td>{{ item.instance.clock_speed|wordwrap:12|linebreaks }}</td>
                 </tr>
   
                 {# Blank row between associated rows #}
@@ -58,16 +36,16 @@
   
                 <tr>
                   <th>Current<br>Generation</th>
-                  <th>Physical<br>Processor</th>
-                  <th>Clock<br>Speed</th>
+                  <th>Network<br>Performance</th>
+                  <th>Storage</th>
                   <th>Decidated<br>EBS<br>Throughput</th>
                 </tr>
   
                 <tr>
-                  <td>{{ instance.current_generation }}</td>
-                  <td>{{ instance.physical_processor|wordwrap:12|linebreaks }}</td>
-                  <td>{{ instance.clock_speed|wordwrap:12|linebreaks }}</td>
-                  <td>{{ instance.dedicated_ebs_throughput }}</td>
+                  <td>{{ item.instance.current_generation }}</td>
+                  <td>{{ item.instance.network_performance|wordwrap:12|linebreaks }}</td>
+                  <td>{{ item.instance.storage }}</td>
+                  <td>{{ item.instance.dedicated_ebs_throughput }}</td>
                 </tr>
   
               </tbody>
@@ -77,85 +55,109 @@
       </div>
     </div>
 
-       
     <div class="col-xs-12 col-sm-6">
       <div class="panel-group">
         <div class="panel panel-default">
           <div class="panel-heading">
             <h4 class="panel-title">
-          Prices
+              Pricing (USD)
             </h4>
           </div>
 
-          <table class="table table_condensed">
-            <thead>
-              <tr>
-                <th>OnDemand</th>
-                <th>Reserved<br>1 Year</x`th>
-                <th>Reserved<br>3 Years</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>$x.yz - $a.bc<br>Per Hour</td>
-                <td>  
-                  <b>All Upfront</b>
-                  <br>
-                  $xxxxxx -$yyyyyy
-                  <br>
-                  <b>Effective</b>
-                  <br>
-                  ($x.yz - $a.bc)<br>Per Hour
-                </td>
-                <td>  
-                  <b>All Upfront</b>
-                  <br>
-                  $xxxxxx -$yyyyyy
-                  <br>
-                  <b>Effective</b>
-                  <br>
-                  ($x.yz - $a.bc)<br>Per Hour
-                </td>
-              </tr>
-              <tr>
-                <td></td>
-                <td>  
-                  <b>Partial Upfront</b>
-                  <br>
-                  $xxxxxx -$yyyyyy
-                  <br>
-                  <b>plus</b>
-                  <br>
-                  $a.bc - $d.ef
-                  <br>
-                  Per Hour
-                  <br>
-                  <b>Effective</b>
-                  <br>
-                  ($x.yz - $a.bc)<br>Per Hour
-                </td>
-                <td>  
-                  <b>Partial Upfront</b>
-                  <br>
-                  $xxxxxx -$yyyyyy
-                  <br>
-                  <b>plus</b>
-                  <br>
-                  $a.bc - $d.ef
-                  <br>
-                  Per Hour
-                  <br>
-                  <b>Effective</b>
-                  <br>
-                  ($x.yz - $a.bc)<br>Per Hour
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="table-responsive">
+            <table class="table table_condensed">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Shared</th>
+                  <th>Dedicated</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th> On Demand </th>
+                  <td> xxx - xxx /hr </td>
+                  <td> xxx - xxx /hr </td>
+                </tr>
+
+                <tr>
+                  <th> Reserved 1yr</th>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td> All Upfront</td>
+                  <td> YYYYY - YYYYY</td>
+                  <td> YYYYY - YYYYY</td>
+                </tr>
+                <tr>
+                  <td>
+                    Partial Upfront
+                    <br>
+                    Plus
+                    <br>
+                    <br>
+                    <small>(Effective)</small>
+                  </td>
+                  <td>
+                    YYYYY - YYYYY
+                    <br>
+                    xxx - xxxx/hr
+                    <br>
+                    <br>
+                    <small>xxx - xxxx/hr</small>
+                  </td>
+                  <td>
+                    YYYYY - YYYYY
+                    <br>
+                    xxx - xxxx/hr
+                    <br>
+                    <br>
+                    <small>xxx - xxxx/hr</small>
+                  </td>
+                </tr>
+
+                <tr>
+                  <th> Reserved 3yr</th>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td> All Upfront</td>
+                  <td> YYYYY - YYYYY</td>
+                  <td> YYYYY - YYYYY</td>
+                </tr>
+                <tr>
+                  <td>
+                    Partial Upfront
+                    <br>
+                    Plus
+                    <br>
+                    <br>
+                    <small>(Effective)</small>
+                  </td>
+                  <td>
+                    YYYYY - YYYYY
+                    <br>
+                    xxx - xxxx/hr
+                    <br>
+                    <br>
+                    <small>xxx - xxxx/hr</small>
+                  </td>
+                  <td>
+                    YYYYY - YYYYY
+                    <br>
+                    xxx - xxxx/hr
+                    <br>
+                    <br>
+                    <small>xxx - xxxx/hr</small>
+                  </td>
+
+              </tbody>
+
+            </table>
+          </div>
         </div>
 
       </div>
-
     </div>
-  </div>
-{% endblock %}

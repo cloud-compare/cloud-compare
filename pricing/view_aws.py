@@ -7,6 +7,54 @@ from django.db.models import Min, Max
 
 from pricing.models import AWS
 
+def get_aws_compute_instance(instance_type):
+    aws = AWS.objects.filter(
+                             instance_type=instance_type,
+                             operating_system='Linux',
+                            )
+
+    instance = aws[0]
+
+    ondemand = aws.filter(term_type='OnDemand')
+    print 'ondemand, shared:', ondemand.filter(tenancy='Shared').count()
+    print 'ondemand, dedicated:', ondemand.filter(tenancy='Dedicated').count()
+
+    reserved = aws.filter(term_type='Reserved')
+    print 'reserved, shared:', reserved.filter(tenancy='Shared').count()
+    print 'reserved, dedicated:', reserved.filter(tenancy='Dedicated').count()
+    print 'reserved:', reserved.count()
+
+    args = {
+             'instance_type': instance_type,
+             'instance': instance,
+           }
+    return args
+
+
+def aws_compute_instance(request, offer_code, instance_type):
+    aws = AWS.objects.filter(
+                             instance_type=instance_type,
+                             operating_system='Linux',
+                            )
+
+    instance = aws[0]
+
+    ondemand = aws.filter(term_type='OnDemand')
+    print 'ondemand, shared:', ondemand.filter(tenancy='Shared').count()
+    print 'ondemand, dedicated:', ondemand.filter(tenancy='Dedicated').count()
+
+    reserved = aws.filter(term_type='Reserved')
+    print 'reserved, shared:', reserved.filter(tenancy='Shared').count()
+    print 'reserved, dedicated:', reserved.filter(tenancy='Dedicated').count()
+    print 'reserved:', reserved.count()
+
+    args = {
+             'offer_code': offer_code,
+             'instance_type': instance_type,
+             'instance': instance,
+           }
+    return render(request, 'bootstrap_aws_compute_instance.html', args)
+
 
 # Displays a AWS 'Bundle' product_family
 def aws_family_bundle(request, offer_code):
@@ -60,49 +108,49 @@ def aws_family_data_transfer(request, offer_code):
     return render(request, 'bootstrap_aws_data_transfer.html', args)
 
 
-def aws_family_compute_instance(request, offer_code):
-    """Handle AWS 'Compute Instance' items."""
-    aws = AWS.objects
-    aws = aws.filter(offer_code=offer_code,
-                     product_family='Compute Instance',
-                     term_type = 'OnDemand', price_per_unit__gt = 0)
-    pr = aws.order_by('instance_family', 'memory', 'instance_type')
-    pr = pr.values('instance_family', 'instance_type', 'vcpu', 'memory',
-                   'current_generation', 'physical_processor',
-                   'network_performance', 'storage')
-    pr = pr.distinct()
-
-    nregions = aws.values('location').order_by('location').distinct().count()
-
-    # Build tree structure
-    items = []
-    sitems = []
-    ifamily = None
-    for p in pr:
-       if p['instance_family'] != ifamily:
-           if ifamily is not None:
-               items.append({'label': ifamily, 'items': sitems})
-
-           ifamily = p['instance_family']
-           sitems = []
-
-       iregions = aws.filter(instance_type=p['instance_type']). \
-                  values('instance_type', 'location'). \
-                  order_by('filter').distinct().count()
-
-       print p['instance_type'], iregions, nregions
-
-       sitems.append({'item' : p, 'all_regions': (iregions == nregions)})
-       pass
-
-    if len(sitems) > 0:
-        items.append({'label': ifamily, 'items': sitems})
-
-    args = {'offer_code': offer_code,
-            'product_family': 'Compute Instance',
-            'items': items,
-            'products': pr}
-    return render(request, 'bootstrap_aws_compute_instance_l1.html', args)
+#def aws_family_compute_instance(request, offer_code):
+#    """Handle AWS 'Compute Instance' items."""
+#    aws = AWS.objects
+#    aws = aws.filter(offer_code=offer_code,
+#                     product_family='Compute Instance',
+#                     term_type = 'OnDemand', price_per_unit__gt = 0)
+#    pr = aws.order_by('instance_family', 'memory', 'instance_type')
+#    pr = pr.values('instance_family', 'instance_type', 'vcpu', 'memory',
+#                   'current_generation', 'physical_processor',
+#                   'network_performance', 'storage')
+#    pr = pr.distinct()
+#
+#    nregions = aws.values('location').order_by('location').distinct().count()
+#
+#    # Build tree structure
+#    items = []
+#    sitems = []
+#    ifamily = None
+#    for p in pr:
+#       if p['instance_family'] != ifamily:
+#           if ifamily is not None:
+#               items.append({'label': ifamily, 'items': sitems})
+#
+#           ifamily = p['instance_family']
+#           sitems = []
+#
+#       iregions = aws.filter(instance_type=p['instance_type']). \
+#                  values('instance_type', 'location'). \
+#                  order_by('filter').distinct().count()
+#
+#       print p['instance_type'], iregions, nregions
+#
+#       sitems.append({'item' : p, 'all_regions': (iregions == nregions)})
+#       pass
+#
+#    if len(sitems) > 0:
+#        items.append({'label': ifamily, 'items': sitems})
+#
+#    args = {'offer_code': offer_code,
+#            'product_family': 'Compute Instance',
+#            'items': items,
+#            'products': pr}
+#    return render(request, 'bootstrap_aws_compute_instance_l1.html', args)
 
 
 def aws_family_storage(request, offer_code):
@@ -156,24 +204,23 @@ def aws_offer_family(request, offer_code, product_family):
 
 
 # Information for a specific instance type (eg. 't2.micro')
-def aws_compute_instance(request, offer_code, product_family, instance_type):
-    """Handle AWS requests for a specific compute_instance."""
-
-    aws = AWS.objects.filter(Q(product_family='Compute Instance'),
-                     Q(instance_type=instance_type))
-
-    # Get summarized information about this instance_type
-    sum = aws.values('instance_family', 'instance_type', 'vcpu', 'memory',
-                     'physical_processor', 'network_performance',
-                     'storage', 'current_generation', 'clock_speed',
-                     'dedicated_ebs_throughput')
-    sum = sum.distinct()
-
-    # TBD #### Pricing data
-    args = {
-               'offer_code': offer_code,
-               'product_family': product_family,
-               'instance_type': instance_type,
-               'instance': sum[0],
-           }
-    return render(request, 'bootstrap_aws_compute_instance.html', args)
+#def aws_compute_instance(request, offer_code, product_family, instance_type):
+#    """Handle AWS requests for a specific compute_instance."""
+#
+#    aws = AWS.objects.filter(Q(product_family='Compute Instance'),
+#                     Q(instance_type=instance_type))
+#
+#    # Get summarized information about this instance_type
+#    sum = aws.values('instance_family', 'instance_type', 'vcpu', 'memory',
+#                     'physical_processor', 'network_performance',
+#                     'storage', 'current_generation', 'clock_speed',
+#                     'dedicated_ebs_throughput')
+#    sum = sum.distinct()
+#
+#    # TBD #### Pricing data
+#    args = {
+#               'offer_code': offer_code,
+#               'product_family': product_family,
+#               'instance_type': instance_type,
+#               'instance': sum[0],
+#           }
