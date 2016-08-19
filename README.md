@@ -52,6 +52,7 @@ Running ```ingest``` more than one time results in multiple entries in the
 master database.
 
    To extract data from master DB to UI DB's
+
    ```$ python manage.py extract```
 
 Running ```extract``` more than one time results in multiple entries in the 
