@@ -64,9 +64,9 @@
                 </tr>
                 <tr>
                   <td> </td>
-                  <td> {{ item.prices.base.us.per_year}}/Yr </td>
-                  <td> {{ item.prices.base.asia.per_year}} </td>
-                  <td> {{ item.prices.base.europe.per_year}} </td>
+                  <td> {{ item.prices.base.us.per_year|floatformat}}/Yr </td>
+                  <td> {{ item.prices.base.asia.per_year|floatformat}} </td>
+                  <td> {{ item.prices.base.europe.per_year|floatformat}} </td>
                 </tr>
 
               </tbody>

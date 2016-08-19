@@ -213,3 +213,69 @@ class UIVMSummary(models.Model):
 
     # url to use
     url = models.TextField()
+
+
+# Precomputed data to populate AWS Comput instance modal
+class UIAWSSummary(models.Model):
+    name = models.TextField()
+    memory = models.FloatField()
+    vcpu = models.FloatField()
+    physical_processor = models.TextField()
+    clock_speed = models.TextField(null=True)
+    current_generation = models.TextField(null=True)
+    network_performance = models.TextField()
+    storage = models.TextField()
+    dedicated_ebs_throughput = models.TextField(null=True)
+
+    # OnDemand Prices
+    on_demand_shared_low = models.FloatField()
+    on_demand_shared_high = models.FloatField()
+    on_demand_dedicated_low = models.FloatField(null=True)
+    on_demand_dedicated_high = models.FloatField(null=True)
+
+    # Reserved 1yr prices
+    reserved_1yr_noupfront_shared_low = models.FloatField(null=True)
+    reserved_1yr_noupfront_shared_high = models.FloatField(null=True)
+
+    reserved_1yr_upfront_shared_low = models.FloatField(null=True)
+    reserved_1yr_upfront_shared_high = models.FloatField(null=True)
+    reserved_1yr_upfront_dedicated_low = models.FloatField(null=True)
+    reserved_1yr_upfront_dedicated_high = models.FloatField(null=True)
+
+    reserved_1yr_upfront_dedicated_effective_low = models.FloatField(null=True)
+    reserved_1yr_upfront_dedicated_effective_high = models.FloatField(null=True)
+
+    reserved_1yr_partial_shared_low = models.FloatField(null=True)
+    reserved_1yr_partial_shared_high = models.FloatField(null=True)
+    reserved_1yr_partial_dedicated_low = models.FloatField(null=True)
+    reserved_1yr_partial_dedicated_high = models.FloatField(null=True)
+
+    reserved_1yr_partial_hr_shared_low = models.FloatField(null=True)
+    reserved_1yr_partial_hr_shared_high = models.FloatField(null=True)
+    reserved_1yr_partial_hr_dedicated_low = models.FloatField(null=True)
+    reserved_1yr_partial_hr_dedicated_high = models.FloatField(null=True)
+
+    reserved_1yr_partial_dedicated_effective_low = models.FloatField(null=True)
+    reserved_1yr_partial_dedicated_effective_high = models.FloatField(null=True)
+
+    # Reserved 3yr prices
+    reserved_3yr_upfront_shared_low = models.FloatField(null=True)
+    reserved_3yr_upfront_shared_high = models.FloatField(null=True)
+    reserved_3yr_upfront_dedicated_low = models.FloatField(null=True)
+    reserved_3yr_upfront_dedicated_high = models.FloatField(null=True)
+
+    reserved_3yr_upfront_dedicated_effective_low = models.FloatField(null=True)
+    reserved_3yr_upfront_dedicated_effective_high = models.FloatField(null=True)
+
+    reserved_3yr_partial_shared_low = models.FloatField(null=True)
+    reserved_3yr_partial_shared_high = models.FloatField(null=True)
+    reserved_3yr_partial_dedicated_low = models.FloatField(null=True)
+    reserved_3yr_partial_dedicated_high = models.FloatField(null=True)
+
+    reserved_3yr_partial_hr_shared_low = models.FloatField(null=True)
+    reserved_3yr_partial_hr_shared_high = models.FloatField(null=True)
+    reserved_3yr_partial_hr_dedicated_low = models.FloatField(null=True)
+    reserved_3yr_partial_hr_dedicated_high = models.FloatField(null=True)
+
+    reserved_3yr_partial_dedicated_effective_low = models.FloatField(null=True)
+    reserved_3yr_partial_dedicated_effective_high = models.FloatField(null=True)
