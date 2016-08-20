@@ -5,30 +5,20 @@ from django.db.models import Q
 from django.db.models import Count
 from django.db.models import Min, Max
 
-from pricing.models import AWS
+from pricing.models import AWS, UIAWSSummary
 
+# This the new
 def get_aws_compute_instance(instance_type):
-    aws = AWS.objects.filter(
-                             instance_type=instance_type,
-                             operating_system='Linux',
-                            )
-
-    instance = aws[0]
-
-    ondemand = aws.filter(term_type='OnDemand')
-    print 'ondemand, shared:', ondemand.filter(tenancy='Shared').count()
-    print 'ondemand, dedicated:', ondemand.filter(tenancy='Dedicated').count()
-
-    reserved = aws.filter(term_type='Reserved')
-    print 'reserved, shared:', reserved.filter(tenancy='Shared').count()
-    print 'reserved, dedicated:', reserved.filter(tenancy='Dedicated').count()
-    print 'reserved:', reserved.count()
+    instance = UIAWSSummary.objects.get(name=instance_type)
 
     args = {
              'instance_type': instance_type,
              'instance': instance,
            }
     return args
+
+
+# Past here is aobsolete
 
 
 def aws_compute_instance(request, offer_code, instance_type):

@@ -41,7 +41,7 @@ def get_aws_rsv_prices(query, obj, poption, unit, minname, maxname):
     # partial upfront
     min_price = query.filter(purchase_option=poption, unit=unit). \
                     aggregate(Min('price_per_unit'))['price_per_unit__min']
-    max_price = query.filter(purchase_option='All Upfront'). \
+    max_price = query.filter(purchase_option=poption, unit=unit). \
                   aggregate(Max('price_per_unit'))['price_per_unit__max']
     setattr(obj, minname, min_price)
     setattr(obj, maxname, max_price)
@@ -190,9 +190,11 @@ class Command(BaseCommand):
             od = name_q.filter(term_type='Reserved',
                                tenancy='Shared',
                                lease_contract_length='1yr')
+
             get_aws_rsv_prices(od, uar, 'No Upfront', 'Hrs',
                                'reserved_1yr_noupfront_shared_low',
                                'reserved_1yr_noupfront_shared_high')
+
             get_aws_rsv_prices(od, uar, 'All Upfront', 'Quantity',
                                'reserved_1yr_upfront_shared_low',
                                'reserved_1yr_upfront_shared_high')
@@ -208,9 +210,11 @@ class Command(BaseCommand):
             od = name_q.filter(term_type='Reserved',
                                tenancy='Dedicated',
                                lease_contract_length='1yr')
+
             get_aws_rsv_prices(od, uar, 'No Upfront', 'Hrs',
                                'reserved_1yr_noupfront_dedicated_low',
                                'reserved_1yr_noupfront_dedicated_high')
+
             get_aws_rsv_prices(od, uar, 'All Upfront', 'Quantity',
                                'reserved_1yr_upfront_dedicated_low',
                                'reserved_1yr_upfront_dedicated_high')
@@ -218,6 +222,7 @@ class Command(BaseCommand):
             get_aws_rsv_prices(od, uar, 'Partial Upfront', 'Quantity',
                                'reserved_1yr_partial_dedicated_low',
                                'reserved_1yr_partial_dedicated_high')
+
             get_aws_rsv_prices(od, uar, 'Partial Upfront', 'Hrs',
                                'reserved_1yr_partial_hr_dedicated_low',
                                'reserved_1yr_partial_hr_dedicated_high')
@@ -226,9 +231,11 @@ class Command(BaseCommand):
             od = name_q.filter(term_type='Reserved',
                                tenancy='Shared',
                                lease_contract_length='3yr')
+
             get_aws_rsv_prices(od, uar, 'No Upfront', 'Hrs',
                                'reserved_3yr_noupfront_shared_low',
                                'reserved_3yr_noupfront_shared_high')
+
             get_aws_rsv_prices(od, uar, 'All Upfront', 'Quantity',
                                'reserved_3yr_upfront_shared_low',
                                'reserved_3yr_upfront_shared_high')
@@ -236,6 +243,7 @@ class Command(BaseCommand):
             get_aws_rsv_prices(od, uar, 'Partial Upfront', 'Quantity',
                                'reserved_3yr_partial_shared_low',
                                'reserved_3yr_partial_shared_high')
+
             get_aws_rsv_prices(od, uar, 'Partial Upfront', 'Hrs',
                                'reserved_3yr_partial_hr_shared_low',
                                'reserved_3yr_partial_hr_shared_high')
@@ -244,9 +252,11 @@ class Command(BaseCommand):
             od = name_q.filter(term_type='Reserved',
                                tenancy='Dedicated',
                                lease_contract_length='3yr')
+
             get_aws_rsv_prices(od, uar, 'No Upfront', 'Hrs',
                                'reserved_3yr_noupfront_dedicated_low',
                                'reserved_3yr_noupfront_dedicated_high')
+
             get_aws_rsv_prices(od, uar, 'All Upfront', 'Quantity',
                                'reserved_3yr_upfront_dedicated_low',
                                'reserved_3yr_upfront_dedicated_high')
@@ -254,6 +264,7 @@ class Command(BaseCommand):
             get_aws_rsv_prices(od, uar, 'Partial Upfront', 'Quantity',
                                'reserved_3yr_partial_dedicated_low',
                                'reserved_3yr_partial_dedicated_high')
+
             get_aws_rsv_prices(od, uar, 'Partial Upfront', 'Hrs',
                                'reserved_3yr_partial_hr_dedicated_low',
                                'reserved_3yr_partial_hr_dedicated_high')

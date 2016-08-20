@@ -236,6 +236,8 @@ class UIAWSSummary(models.Model):
     # Reserved 1yr prices
     reserved_1yr_noupfront_shared_low = models.FloatField(null=True)
     reserved_1yr_noupfront_shared_high = models.FloatField(null=True)
+    reserved_1yr_noupfront_dedicated_low = models.FloatField(null=True)
+    reserved_1yr_noupfront_dedicated_high = models.FloatField(null=True)
 
     reserved_1yr_upfront_shared_low = models.FloatField(null=True)
     reserved_1yr_upfront_shared_high = models.FloatField(null=True)
@@ -259,6 +261,11 @@ class UIAWSSummary(models.Model):
     reserved_1yr_partial_dedicated_effective_high = models.FloatField(null=True)
 
     # Reserved 3yr prices
+    reserved_3yr_noupfront_shared_low = models.FloatField(null=True)
+    reserved_3yr_noupfront_shared_high = models.FloatField(null=True)
+    reserved_3yr_noupfront_dedicated_low = models.FloatField(null=True)
+    reserved_3yr_noupfront_dedicated_high = models.FloatField(null=True)
+
     reserved_3yr_upfront_shared_low = models.FloatField(null=True)
     reserved_3yr_upfront_shared_high = models.FloatField(null=True)
     reserved_3yr_upfront_dedicated_low = models.FloatField(null=True)

@@ -19,9 +19,8 @@ from django.contrib import admin
 from pricing import view_main
 
 urlpatterns = [
-    url(r'^pricing/', include('pricing.urls')),
     url(r'^about/$', view_main.about, name='about'),
-    url(r'^admin/', admin.site.urls),
+    # url(r'^admin/', admin.site.urls),
     url(r'^$', view_main.main, name='main')
 ]
 

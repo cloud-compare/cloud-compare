@@ -11,50 +11,26 @@ from models import UIMain, UIVMSummary
 
 from view_gcp import get_gcp_vmimage
 from view_aws import get_aws_compute_instance
-
-class VMType():
-    def __init__(self, name, gcp, aws, azure):
-        self.name = name
-        self.aws = aws
-        self.gcp = gcp
-        self.azure = azure
-
-    def __repr__(self):
-        return self.name + " " + str(self.aws) + " " +  str(self.gcp) + " " +  str(self.azure)
-
-    def name(self):
-        return self.name
-
-    def gcp(self):
-        return self.gcp
-
-    def aws(self):
-        return self.aws
-
-    def azure(self):
-        return self.azure
     
 
+# Handles main
 def main(request):
+    """Build main page."""
 
     # Get the Virtual Machines.
     uim = UIMain.objects.filter(type='VirtMach')
     uim = uim.values('tclass', 'total')
-    print uim
 
+    # Get the catagory bands
     items = {}
     for u in uim:
         tclass = u['tclass']
-        print tclass
         uis = UIVMSummary.objects.filter(tclass=tclass)
         uis = uis.order_by('memory', 'cpu')
         uis = uis.values('provider', 'tclass', 'name', 'memory', 'cpu', 'price')
 
-        #todo #### Setup next level struct for the modal
-        
         item = {'summary': uis}
         for ui in uis:
-          print ui['provider']
           if ui['provider'] == 'google':
               ui['details'] = get_gcp_vmimage(ui['name'])
           elif ui['provider'] == 'amazon':
