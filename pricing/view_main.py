@@ -44,23 +44,6 @@ def main(request):
     return render(request, 'bootstrap_main.html', args)
 
 
-def class_list(request, type, provider, tclass):
-    print type, provider, tclass
-
-    if type != 'VirtMach':
-        raise Http404('type is not "VirtMach"')
-
-    uis = UIVMSummary.objects.filter(tclass=tclass)
-
-    if provider != 'all':
-        uis = uis.filter(provider=provider)
-
-    uis = uis.order_by('memory', 'cpu')
-
-    args = {'tclass': tclass, 'provider': provider, 'items': uis}
-    return render(request, 'bootstrap_vmlist.html', args)
-     
-
 def about(request):
     args = {}
     return render(request, "bootstrap_about.html", args)
