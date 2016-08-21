@@ -43,16 +43,15 @@
                     <div class="table-responsive">
                     <table class="table">
                       <thead>
-                        <tr>
-                        <th>Name</th>
-                        <th>Mem</th>
-                        <th>CPU</th>
-                        <th>Price<br>USD</th>
-                        </tr>
                       </thead>
                       <tbody>
                         {% for item in tc.items %}
                           <tr>
+                            <th>
+                          {% ifchanged item.cpu %}
+                            CPU: {{item.cpu}}
+                          {% endifchanged %}
+                            </th>
         
                           <td>
                             <button type="button"
@@ -60,7 +59,9 @@
                                     data-toggle="modal"
                                     data-target="#md{{item.name|slugify}}"}>
 
-                            <small>
+                                  <table class="table">
+                                    <thead>
+                                    <caption>
                           {% if item.provider == 'amazon' %}
                             <i class="fa fa-amazon" aria-hidden="true"></i>
                           {% elif item.provider == 'google' %}
@@ -69,9 +70,35 @@
                             <i class="fa fa-windows" aria-hidden="true"></i>
                           {% else %}
                           {% endif %}
-        
+
+                          <small>
+                          {% if item.current_generation == 'Yes' %}
+                            <i class="fa fa-arrow-up" aria-hidden="true"></i>
+
+                          {% elif item.current_generation == 'No' %}
+                            <i class="fa fa-arrow-down" aria-hidden="true"></i>
+
+                          {% endif %}
+                          </small>
+
                               {{ item.name }}
-                              </small>
+                                   </caption>
+                                 </thead>
+                                 <tbody>
+                                 <tr>
+                                   <th> Memory </th>
+                                   <td> {{ item.memory }} </td>
+                                 </tr>
+                                 </tr>
+                                   <th> CPU </th>
+                                   <td> {{ item.cpu }} </td>
+                                 </tr>
+                                 </tr>
+                                   <th> Low Price </th>
+                                   <td> {{ item.price|floatformat:3 }} </td>
+                                 </tr>
+                                </table>
+
                             </button>
 
   {# This is the modal content, 1 for each VMIMAGE #}
@@ -122,19 +149,6 @@
       </div>
     </div>
   </div>
-                          </td>
-        
-                          <td>
-                            {{ item.memory }}
-                          </td>
-        
-                          <td>
-                            {{ item.cpu }}
-                          </td>
-        
-                          <td>
-                            {{ item.price|floatformat:3 }}
-                          </td>
         
                           </tr>
                         {% endfor %}

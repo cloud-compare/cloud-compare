@@ -214,6 +214,10 @@ class UIVMSummary(models.Model):
     # url to use
     url = models.TextField()
 
+    # current generation?
+    current_generation = models.TextField(null=True)
+    
+
 
 # Precomputed data to populate AWS Comput instance modal
 class UIAWSSummary(models.Model):

@@ -75,7 +75,7 @@ class Command(BaseCommand):
                                 )
 
 
-        aws_m = aws.values('instance_type', 'memory', 'vcpu'). \
+        aws_m = aws.values('instance_type', 'memory', 'vcpu', 'current_generation'). \
                     order_by('instance_type').distinct()
         gcp_m = gcp.values('pargs', 'memory', 'cores', 'us').order_by('pargs')
         gcp_m = gcp_m.distinct()
@@ -115,6 +115,7 @@ class Command(BaseCommand):
                                  cpu=a['vcpu'],
                                  price=price,
                                  url=url,
+                                 current_generation=a['current_generation']
                                 )
 
                 ar.save()

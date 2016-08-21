@@ -26,8 +26,8 @@ def main(request):
     for u in uim:
         tclass = u['tclass']
         uis = UIVMSummary.objects.filter(tclass=tclass)
-        uis = uis.order_by('memory', 'cpu')
-        uis = uis.values('provider', 'tclass', 'name', 'memory', 'cpu', 'price')
+        uis = uis.order_by('cpu', 'price', 'memory')
+        uis = uis.values()
 
         item = {'summary': uis}
         for ui in uis:
