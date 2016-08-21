@@ -6,8 +6,10 @@
 
 {% block content %}
 
+{% comment %}
   <div class="row">
     <div class="col-xs-12">
+{% endcomment %}
    
          
       <div class="panel panel-default">
@@ -40,123 +42,7 @@
 
                 <div id="vm{{tc.tclass|slugify}}" class="panel-collapse collapse">
                   <div class="panel-body">
-                    <div class="table-responsive">
-                    <table class="table">
-                      <thead>
-                      </thead>
-                      <tbody>
-                        {% for item in tc.items %}
-                          <tr>
-                            <th>
-                          {% ifchanged item.cpu %}
-                            CPU: {{item.cpu}}
-                          {% endifchanged %}
-                            </th>
-        
-                          <td>
-                            <button type="button"
-                                    class="btn btn-default btn-block"
-                                    data-toggle="modal"
-                                    data-target="#md{{item.name|slugify}}"}>
-
-                                  <table class="table">
-                                    <thead>
-                                    <caption>
-                          {% if item.provider == 'amazon' %}
-                            <i class="fa fa-amazon" aria-hidden="true"></i>
-                          {% elif item.provider == 'google' %}
-                            <i class="fa fa-google" aria-hidden="true"></i>
-                          {% elif item.provider == 'microsoft' %}
-                            <i class="fa fa-windows" aria-hidden="true"></i>
-                          {% else %}
-                          {% endif %}
-
-                          <small>
-                          {% if item.current_generation == 'Yes' %}
-                            <i class="fa fa-arrow-up" aria-hidden="true"></i>
-
-                          {% elif item.current_generation == 'No' %}
-                            <i class="fa fa-arrow-down" aria-hidden="true"></i>
-
-                          {% endif %}
-                          </small>
-
-                              {{ item.name }}
-                                   </caption>
-                                 </thead>
-                                 <tbody>
-                                 <tr>
-                                   <th> Memory </th>
-                                   <td> {{ item.memory }} </td>
-                                 </tr>
-                                 </tr>
-                                   <th> CPU </th>
-                                   <td> {{ item.cpu }} </td>
-                                 </tr>
-                                 </tr>
-                                   <th> Low Price </th>
-                                   <td> {{ item.price|floatformat:3 }} </td>
-                                 </tr>
-                                </table>
-
-                            </button>
-
-  {# This is the modal content, 1 for each VMIMAGE #}
-  <div class="modal fade" id="md{{item.name|slugify}}" role="dialog">
-    <div class="modal-dialog modal-lg">
-    
-      <!-- Modal associated with button-->
-      <div class="modal-content">
-
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">
-            {% if item.provider == 'amazon' %}
-              <i class="fa fa-amazon" aria-hidden="true"></i>
-              <small>Amazon</small>
-              <br>
-              <small>AmazonEC2 : Compute Instance : {{ item.name }}</small>
-            {% elif item.provider == 'google' %}
-              <i class="fa fa-google" aria-hidden="true"></i>
-              <small>Google</small>
-              <br>
-              <small>ComputeEngine : VMImage: {{ item.name }}</small>
-            {% elif item.provider == 'microsoft' %}
-              <i class="fa fa-windows" aria-hidden="true"></i>
-            {% else %}
-            {% endif %}
-            <br>
-          </h4>
-        </div>
-
-        <div class="modal-body">
-          <div class="row">
-            {# Include the correct generator #}
-            {% if item.provider == 'amazon' %}
-              {% with item=item.details.instance %} 
-                {% include "bootstrap_aws_compute_instance.html" %}
-              {% endwith %}
-            {% elif item.provider == 'google' %}
-              {% with item=item.details %} 
-                {% include "bootstrap_gcp_vmimage.html" %}
-              {% endwith %}
-            {% elif item.provider == 'microsoft' %}
-              Watch this space
-            {% endif %}
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-        
-                          </tr>
-                        {% endfor %}
-                      </tbody>
-                    </table>
-
-
-                    </div>
+                  {% include "bootstrap_vmthumbnail.html" %}
                   </div>
                 </div>
               </div>
@@ -165,6 +51,8 @@
           {% endfor %}
         </div>
       </div>
+{% comment %}
     </div>
   </div>
+{% endcomment %}
 {% endblock %}
