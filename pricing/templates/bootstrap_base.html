@@ -23,6 +23,23 @@
 
 <body>
 
+  <div id="aboutModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"
+                  aria-hidden="true">
+            ×
+          </button>
+            <h5 id="myModalLabel">About</h5>
+        </div>
+        <div class="modal-body">
+          <p> {% include "bootstrap_about.html" %}
+        </div>
+      </div>
+    </div>
+  </div>
+
   <nav class="navbar navbar-default">
     <div class="container-fluid">
       <div class="navbar-header">
@@ -39,8 +56,8 @@
 
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav">
-          <li>
-            <a href="/about">
+          <li class="active">
+            <a href="#aboutModal" data-toggle="modal">
               About
             </a>
           </li>
