@@ -2,65 +2,50 @@
 Builds a thumbnai and popup model for a single type of virtual machine
 {% endcomment %}
 
-<div class="table-responsive">
+<button type="button" class="btn btn-default btn-block"
+        data-toggle="modal" data-target="#md{{item.name|slugify}}"}>
+
   <table class="table">
     <thead>
+      <caption>
+        {% if item.provider == 'amazon' %}
+          <i class="fa fa-amazon" aria-hidden="true"></i>
+        {% elif item.provider == 'google' %}
+          <i class="fa fa-google" aria-hidden="true"></i>
+        {% elif item.provider == 'microsoft' %}
+          <i class="fa fa-windows" aria-hidden="true"></i>
+        {% else %}
+        {% endif %}
+
+        <br>
+        {{ item.name }}
+        <small>
+        {% if item.current_generation == 'Yes' %}
+          <i class="fa fa-arrow-up" aria-hidden="true"></i>
+
+        {% elif item.current_generation == 'No' %}
+          <i class="fa fa-arrow-down" aria-hidden="true"></i>
+
+        {% endif %}
+        </small>
+      </caption>
     </thead>
     <tbody>
-    {% for item in tc.items %}
       <tr>
-        <th>
-        {% ifchanged item.cpu %}
-          CPU: {{item.cpu}}
-        {% endifchanged %}
-        </th>
-        <td>
-          <button type="button"
-                  class="btn btn-default btn-block"
-                  data-toggle="modal"
-                  data-target="#md{{item.name|slugify}}"}>
-
-                    <table class="table">
-                      <thead>
-                        <caption>
-                          {% if item.provider == 'amazon' %}
-                            <i class="fa fa-amazon" aria-hidden="true"></i>
-                          {% elif item.provider == 'google' %}
-                            <i class="fa fa-google" aria-hidden="true"></i>
-                          {% elif item.provider == 'microsoft' %}
-                            <i class="fa fa-windows" aria-hidden="true"></i>
-                          {% else %}
-                          {% endif %}
-
-                          <small>
-                          {% if item.current_generation == 'Yes' %}
-                            <i class="fa fa-arrow-up" aria-hidden="true"></i>
-
-                          {% elif item.current_generation == 'No' %}
-                            <i class="fa fa-arrow-down" aria-hidden="true"></i>
-
-                          {% endif %}
-                          </small>
-
-                          {{ item.name }}
-                        </caption>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <th> Memory </th>
-                          <td> {{ item.memory }} </td>
-                        </tr>
-                        <tr>
-                          <th> CPU </th>
-                          <td> {{ item.cpu }} </td>
-                        </tr>
-                        <tr>
-                          <th> Low Price </th>
-                          <td> {{ item.price|floatformat:3 }} </td>
-                        </tr>
-                      </table>
-
-                    </button>
+        <th><small>Memory</small></th>
+        <td>{{ item.memory }}</td>
+      </tr>
+      <tr>
+        <th><small>CPU</small> </th>
+        <td> {{ item.cpu }}</td>
+      </tr>
+      <tr>
+        <th><small>Low Price</small></th>
+        <td> {{ item.price|floatformat:3 }} </td>
+      </tr>
+    </tbody>
+  </table>
+</button>
 
   {# This is the modal content, 1 for each VMIMAGE #}
   <div class="modal fade" id="md{{item.name|slugify}}" role="dialog">
@@ -111,8 +96,3 @@ Builds a thumbnai and popup model for a single type of virtual machine
     </div>
   </div>
         
-          </tr>
-       {% endfor %}
-       </tbody>
-   </table>
-</div>

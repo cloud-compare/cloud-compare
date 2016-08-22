@@ -30,7 +30,6 @@
           {% for tc in items %}
             <div class="col-xs-12">
             {% if tc.total > 0 %}
-              <div class="panel panel-default">
                 <div class="panel-heading">
                   <h4 class="panel-title">
                     <a data-toggle="collapse" href="#vm{{tc.tclass|slugify}}">
@@ -41,11 +40,25 @@
                 </div>
 
                 <div id="vm{{tc.tclass|slugify}}" class="panel-collapse collapse">
-                  <div class="panel-body">
-                  {% include "bootstrap_vmthumbnail.html" %}
-                  </div>
+                  <div>
+                  {% for item in tc.items %}
+                    {% ifchanged item.cpu %}
+                      </div>             {# close off row #}
+                      <div class="row">  {# open up new row #}
+                        <div class="col-xs-12">
+                          <h4>
+                            Memory: {{ tc.tclass }} GB
+                            <br>
+                            CPU: {{item.cpu}}
+                          </h4>
+                        </div>
+                    {% endifchanged %}
+                    <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+                      {% include "bootstrap_vmthumbnail.html" %}
+                    </div>
+                  {% endfor %}
+                   </div> 
                 </div>
-              </div>
             {% endif %}
           </div>
           {% endfor %}
