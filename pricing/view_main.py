@@ -26,13 +26,16 @@ def main(request):
     for u in uim:
         tclass = u['tclass']
         uis = UIVMSummary.objects.filter(tclass=tclass)
-        uis = uis.order_by('cpu', 'price', 'memory')
+        uis = uis.order_by('cpu', 'memory', 'price')
         uis = uis.values()
 
         item = {'summary': uis}
         for ui in uis:
           if ui['provider'] == 'google':
               ui['details'] = get_gcp_vmimage(ui['name'])
+              if ui['cpu'] == 0:
+                  ui['cpu'] = 1
+
           elif ui['provider'] == 'amazon':
               ui['details'] = get_aws_compute_instance(ui['name'])
           else:

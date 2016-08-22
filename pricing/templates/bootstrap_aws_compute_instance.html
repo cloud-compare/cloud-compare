@@ -10,41 +10,39 @@
           <div class="table-responsive">
             <table class="table table_condensed">
               <thead>
-                <tr>
-                  <th>Memory</th>
-                  <th>vCPU</th>
-                  <th>Physical<br>Processor</th>
-                  <th>Clock<br>Speed</th>
-                </tr>
               </thead>
   
               <tbody>
                 <tr>
+                  <th>Memory</th>
                   <td>{{ item.memory }} Gib</td>
+                </tr>
+                <tr>
+                  <th>vCPU</th>
                   <td>{{ item.vcpu }}</td>
+                </tr>
+                <tr>
+                  <th>Physical<br>Processor</th>
                   <td>{{ item.physical_processor|wordwrap:12|linebreaks }}</td>
+                </tr>
+                <tr>
+                  <th>Clock<br>Speed</th>
                   <td>{{ item.clock_speed|wordwrap:12|linebreaks }}</td>
                 </tr>
-  
-                {# Blank row between associated rows #}
-                <tr>
-                  <td/>
-                  <td/>
-                  <td/>
-                  <td/>
-                </tr>
-  
                 <tr>
                   <th>Current<br>Generation</th>
-                  <th>Network<br>Performance</th>
-                  <th>Storage</th>
-                  <th>Decidated<br>EBS<br>Throughput</th>
-                </tr>
-  
-                <tr>
                   <td>{{ item.current_generation }}</td>
+                </tr>
+                <tr>
+                  <th>Network<br>Performance</th>
                   <td>{{ item.network_performance|wordwrap:12|linebreaks }}</td>
+                </tr>
+                <tr>
+                  <th>Storage</th>
                   <td>{{ item.storage }}</td>
+                </tr>
+                <tr>
+                  <th>Decidated<br>EBS<br>Throughput</th>
                   <td>{{ item.dedicated_ebs_throughput }}</td>
                 </tr>
   
