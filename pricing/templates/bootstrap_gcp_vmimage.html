@@ -31,7 +31,7 @@
       </div>
     </div>
 
-    <div class="col-xs-12 col-sm-6">
+    <div class="col-xs-12 col-md-6">
       <div class="panel-group">
         <div class="panel panel-default">
           <div class="panel-heading">
@@ -43,32 +43,40 @@
           <div class="table-responsive">
             <table class="table table_condensed">
               <thead>
-                <tr>
-                  <th></th>
-                  <th>U.S.</th>
-                  <th>Asia</th>
-                  <th>Europe</th>
-                </tr>
               </thead>
               <tbody>
                 <tr>
-                <tr>
-                  <th> Preemptible</th>
-                  <td> {{ item.prices.preempt.us.per_hour}}/Hr </td>
-                  <td> {{ item.prices.preempt.asia.per_hour}} </td>
-                  <td> {{ item.prices.preempt.europe.per_hour}} </td>
-                </tr>
-
-                  <th> Nonpreemptible</th>
-                  <td> {{ item.prices.base.us.per_hour}}/Hr </td>
-                  <td> {{ item.prices.base.asia.per_hour}} </td>
-                  <td> {{ item.prices.base.europe.per_hour}} </td>
+                  <th> Preemptible</th><th></th>
                 </tr>
                 <tr>
-                  <td> </td>
-                  <td> {{ item.prices.base.us.per_year|floatformat}}/Yr </td>
-                  <td> {{ item.prices.base.asia.per_year|floatformat}} </td>
-                  <td> {{ item.prices.base.europe.per_year|floatformat}} </td>
+                  <th>U.S.</th>
+                  <td> {{ item.prices.preempt.us.per_hour|floatformat:3}} / hr </td>
+                </tr>
+                <tr>
+                  <th>Asia</th>
+                  <td> {{ item.prices.preempt.asia.per_hour|floatformat:3}} </td>
+                </tr>
+                <tr>
+                  <th>Europe</th>
+                  <td> {{ item.prices.preempt.europe.per_hour|floatformat:3}} </td>
+                </tr>
+                <tr>
+                  <th> Nonpreemptible</th><th></th>
+                </tr>
+                <tr>
+                  <th>U.S.</th>
+                  <td> {{ item.prices.base.us.per_hour|floatformat:3}} / hr </td>
+                  <td> {{ item.prices.base.us.per_year|floatformat:2}} / yr </td>
+                </tr>
+                <tr>
+                  <th>Asia</th>
+                  <td> {{ item.prices.base.asia.per_hour|floatformat:3}} </td>
+                  <td> {{ item.prices.base.asia.per_year|floatformat:2}} </td>
+                </tr>
+                <tr>
+                  <th>Europe</th>
+                  <td> {{ item.prices.base.europe.per_hour|floatformat:3}} </td>
+                  <td> {{ item.prices.base.europe.per_year|floatformat:2}} </td>
                 </tr>
 
               </tbody>
